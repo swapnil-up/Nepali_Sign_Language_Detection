@@ -1,53 +1,55 @@
 package com.example.nsl_mini
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
+import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.tasks.core.BaseOptions
+import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizer
 import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizerResult
-import com.google.mediapipe.tasks.vision.core.RunningMode
 
-class GestureRecognizerHelper(private val context: Context) {
+class GestureRecognizerHelper(
+    private val context: Context,
+    private val resultListener: (String) -> Unit
+) {
     private var gestureRecognizer: GestureRecognizer? = null
 
-    fun setupGestureRecognizer(
-        modelAssetPath: String,
-        minHandDetectionConfidence: Float = 0.5f,
-        minHandPresenceConfidence: Float = 0.5f,
-        minTrackingConfidence: Float = 0.5f
-    ) {
-        try {
-            val baseOptions = BaseOptions.builder()
-                .setModelAssetPath(modelAssetPath)
-                .build()
+    fun setupGestureRecognizer(modelAssetPath: String) {
+        val baseOptions = BaseOptions.builder()
+            .setModelAssetPath(modelAssetPath)
+            .build()
 
-            val options = GestureRecognizer.GestureRecognizerOptions.builder()
-                .setBaseOptions(baseOptions)
-                .setMinHandDetectionConfidence(minHandDetectionConfidence)
-                .setMinTrackingConfidence(minTrackingConfidence)
-                .setMinHandPresenceConfidence(minHandPresenceConfidence)
-                .setRunningMode(RunningMode.LIVE_STREAM)
-                .setResultListener(this::returnLivestreamResult)
-                .setErrorListener(this::returnLivestreamError)
-                .build()
+        val options = GestureRecognizer.GestureRecognizerOptions.builder()
+            .setBaseOptions(baseOptions)
+            .setRunningMode(RunningMode.LIVE_STREAM)
+            .setResultListener(this::returnLivestreamResult)
+            .setErrorListener(this::returnLivestreamError)
+            .build()
 
-            gestureRecognizer = GestureRecognizer.createFromOptions(context, options)
-        } catch (e: Exception) {
-            Log.e("GestureRecognizerHelper", "Error setting up gesture recognizer", e)
-        }
+        gestureRecognizer = GestureRecognizer.createFromOptions(context, options)
     }
 
+    private fun returnLivestreamResult(result: GestureRecognizerResult, image: MPImage) {
+        val stringBuilder = StringBuilder()
 
-    private fun returnLivestreamResult(result: GestureRecognizerResult, inputImage: MPImage) {
-        // Handle gesture recognition results here
+        result.gestures().forEach { gestureList ->
+            gestureList.forEach { gesture ->
+                stringBuilder.append("Gesture: ${gesture.categoryName()} - Confidence: ${gesture.score()}\n")
+            }
+        }
+
+
+        resultListener(stringBuilder.toString())
     }
 
     private fun returnLivestreamError(error: Exception) {
-        // Handle errors here
+        Log.e("GestureRecognizerHelper", "Error in gesture recognizer", error)
     }
 
-    fun recognizeAsync(image: MPImage, frameTime: Long) {
-        gestureRecognizer?.recognizeAsync(image, frameTime)
+    fun recognizeAsync(bitmap: Bitmap, frameTime: Long) {
+        val mpImage = BitmapImageBuilder(bitmap).build()
+        gestureRecognizer?.recognizeAsync(mpImage, frameTime)
     }
 }

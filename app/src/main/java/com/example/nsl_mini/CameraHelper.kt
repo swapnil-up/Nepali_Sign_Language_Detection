@@ -13,21 +13,15 @@ import android.view.Surface
 import android.view.TextureView
 import androidx.core.app.ActivityCompat
 
-class CameraHelper(private val context: Context, private val textureView: TextureView) {
+class CameraHelper(
+    private val context: Context,
+    private val textureView: TextureView,
+    private val frameListener: (Bitmap) -> Unit
+) {
     private lateinit var cameraDevice: CameraDevice
     private lateinit var captureSession: CameraCaptureSession
     private lateinit var backgroundHandler: Handler
     private lateinit var backgroundThread: HandlerThread
-
-    private var cameraListener: CameraListener? = null
-
-    interface CameraListener {
-        fun onFrame(bitmap: Bitmap)
-    }
-
-    fun setCameraListener(listener: CameraListener) {
-        this.cameraListener = listener
-    }
 
     fun startCamera() {
         startBackgroundThread()
@@ -111,7 +105,10 @@ class CameraHelper(private val context: Context, private val textureView: Textur
         }
 
         override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
-            // Add logic to capture the frame from the texture view and pass it to the listener
+            val bitmap = textureView.bitmap
+            if (bitmap != null) {
+                frameListener(bitmap)
+            }
         }
     }
 
