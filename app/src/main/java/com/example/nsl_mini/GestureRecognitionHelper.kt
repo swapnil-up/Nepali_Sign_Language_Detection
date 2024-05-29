@@ -36,12 +36,13 @@ class GestureRecognizerHelper(
 
         result.gestures().forEach { gestureList ->
             gestureList.forEach { gesture ->
-                stringBuilder.append("Gesture: ${gesture.categoryName()} - Confidence: ${gesture.score()}\n")
+//                stringBuilder.append("Gesture: ${gesture.categoryName()} - Confidence: ${gesture.score()}\n")
+                stringBuilder.append("${gesture.categoryName()}\n")
             }
         }
 
 
-        resultListener(stringBuilder.toString())
+        resultListener(stringBuilder.toString().trim())
     }
 
     private fun returnLivestreamError(error: Exception) {

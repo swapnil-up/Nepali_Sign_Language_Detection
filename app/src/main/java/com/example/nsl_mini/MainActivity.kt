@@ -11,6 +11,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var resultTextView: TextView
     private lateinit var lastResultTextView: TextView
 
+    private var cumulativeResult = StringBuilder()
+    private var lastDetectedLetter: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -22,7 +25,19 @@ class MainActivity : AppCompatActivity() {
         gestureRecognizerHelper = GestureRecognizerHelper(this) { result ->
             runOnUiThread {
                 resultTextView.text = result
-                lastResultTextView.text = "Last Detected Result: $result"
+                val currentLetter = result.split("\n").firstOrNull()?.trim()
+                if (currentLetter != null && currentLetter.lowercase() != "none") {
+                    if (currentLetter != lastDetectedLetter) {
+                        // Append new result to cumulative result
+                        cumulativeResult.append(currentLetter)
+
+                        // Update lastDetectedLetter
+                        lastDetectedLetter = currentLetter
+
+                        // Update lastResultTextView with cumulative result
+                        lastResultTextView.text = "Last Detected Result: ${cumulativeResult.toString()}"
+                    }
+                }
             }
         }
 
