@@ -13,7 +13,7 @@ class LandmarkOverlayView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val paint = Paint().apply {
-        color = Color.RED
+        color = Color.parseColor("#59b5df")
         strokeWidth = 4f // Adjust the width of the lines as needed
     }
 
