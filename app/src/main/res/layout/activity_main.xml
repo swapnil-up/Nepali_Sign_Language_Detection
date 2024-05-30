@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,14 +14,23 @@
         android:text="Last Detected Result:"
         android:textSize="18sp" />
 
-    <!-- Your existing TextureView for camera preview -->
+    <!-- TextureView for camera preview -->
     <TextureView
         android:id="@+id/textureView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/lastResultTextView" />
+        android:layout_height="0dp"
+        android:layout_below="@id/lastResultTextView"
+        android:layout_above="@id/resultTextView" />
 
-    <!-- Your existing TextView for displaying the current result -->
+    <!-- LandmarkOverlayView for drawing landmarks -->
+    <com.example.nsl_mini.LandmarkOverlayView
+        android:id="@+id/landmarkOverlayView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/lastResultTextView"
+        android:layout_above="@id/resultTextView" />
+
+    <!-- TextView for displaying the current result -->
     <TextView
         android:id="@+id/resultTextView"
         android:layout_width="match_parent"
@@ -32,7 +40,6 @@
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:padding="16dp" />
-
 
     <Button
         android:id="@+id/backspaceButton"

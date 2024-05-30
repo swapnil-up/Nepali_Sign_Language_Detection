@@ -10,6 +10,7 @@ import android.widget.Button
 class MainActivity : AppCompatActivity() {
     private lateinit var cameraHelper: CameraHelper
     private lateinit var gestureRecognizerHelper: GestureRecognizerHelper
+    private lateinit var landmarkOverlayView: LandmarkOverlayView
     private lateinit var resultTextView: TextView
     private lateinit var lastResultTextView: TextView
     private lateinit var backspaceButton: Button
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val textureView = findViewById<TextureView>(R.id.textureView)
+        landmarkOverlayView = findViewById(R.id.landmarkOverlayView)
         resultTextView = findViewById(R.id.resultTextView)
         lastResultTextView = findViewById(R.id.lastResultTextView)
         backspaceButton = findViewById(R.id.backspaceButton)
@@ -36,9 +38,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        gestureRecognizerHelper = GestureRecognizerHelper(this) { result ->
+        gestureRecognizerHelper = GestureRecognizerHelper(this) { result, landmarks ->
             runOnUiThread {
                 resultTextView.text = result
+                landmarkOverlayView.setLandmarks(landmarks)
 
                 // Extract the current letter
                 val currentLetter = result.split("\n").firstOrNull()?.trim()

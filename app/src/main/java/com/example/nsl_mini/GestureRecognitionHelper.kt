@@ -9,12 +9,15 @@ import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizer
 import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizerResult
+import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 
 class GestureRecognizerHelper(
     private val context: Context,
-    private val resultListener: (String) -> Unit
-) {
+    private val resultListener: (String, List<NormalizedLandmark>?) -> Unit)
+
+{
     private var gestureRecognizer: GestureRecognizer? = null
+    private val confidenceThreshold = 0.65
 
     fun setupGestureRecognizer(modelAssetPath: String) {
         val baseOptions = BaseOptions.builder()
@@ -26,6 +29,9 @@ class GestureRecognizerHelper(
             .setRunningMode(RunningMode.LIVE_STREAM)
             .setResultListener(this::returnLivestreamResult)
             .setErrorListener(this::returnLivestreamError)
+            .setMinHandDetectionConfidence(confidenceThreshold.toFloat())
+            .setMinHandPresenceConfidence(confidenceThreshold.toFloat())
+            .setMinTrackingConfidence(confidenceThreshold.toFloat())
             .build()
 
         gestureRecognizer = GestureRecognizer.createFromOptions(context, options)
@@ -35,14 +41,15 @@ class GestureRecognizerHelper(
         val stringBuilder = StringBuilder()
 
         result.gestures().forEach { gestureList ->
-            gestureList.forEach { gesture ->
-//                stringBuilder.append("Gesture: ${gesture.categoryName()} - Confidence: ${gesture.score()}\n")
-                stringBuilder.append("${gesture.categoryName()}\n")
-            }
+            gestureList
+                .filter { it.score() >= confidenceThreshold } // Filter gestures by confidence
+                .forEach { gesture ->
+                    stringBuilder.append("${gesture.categoryName()}\n")
+                }
         }
-
-
-        resultListener(stringBuilder.toString().trim())
+        // Extract hand landmarks from the result
+        val handLandmarks = result.landmarks().flatten()
+        resultListener(stringBuilder.toString().trim(), handLandmarks)
     }
 
     private fun returnLivestreamError(error: Exception) {
