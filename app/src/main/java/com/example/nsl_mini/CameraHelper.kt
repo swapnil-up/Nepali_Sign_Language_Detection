@@ -40,7 +40,12 @@ class CameraHelper(
     private fun openCamera() {
         val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
-            val cameraId = manager.cameraIdList[0]
+            // Find the front-facing camera ID
+            val cameraId = manager.cameraIdList.firstOrNull { id ->
+                val characteristics = manager.getCameraCharacteristics(id)
+                characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT
+            } ?: manager.cameraIdList[0] // Fallback to the first camera if no front camera is found
+
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted, handle this case appropriately in your app
                 return

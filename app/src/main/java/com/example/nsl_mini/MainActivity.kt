@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer.task")
+        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer_vowel.task")
 
         cameraHelper = CameraHelper(this, textureView) { bitmap ->
             gestureRecognizerHelper.recognizeAsync(bitmap, System.currentTimeMillis())
