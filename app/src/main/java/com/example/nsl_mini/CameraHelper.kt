@@ -6,129 +6,131 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
-import android.os.Handler
-import android.os.HandlerThread
-import android.util.Log
 import android.view.Surface
 import android.view.TextureView
-import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 class CameraHelper(
     private val context: Context,
     private val textureView: TextureView,
-    private val frameListener: (Bitmap) -> Unit
+    private val onBitmapReady: (Bitmap) -> Unit
 ) {
-    private lateinit var cameraDevice: CameraDevice
-    private lateinit var captureSession: CameraCaptureSession
-    private lateinit var backgroundHandler: Handler
-    private lateinit var backgroundThread: HandlerThread
+    private var cameraId: String = "0"
+    private var cameraDevice: CameraDevice? = null
+    private var captureSession: CameraCaptureSession? = null
+    private var isFrontCamera: Boolean = false
 
-    fun startCamera() {
-        startBackgroundThread()
-        if (textureView.isAvailable) {
-            openCamera()
-        } else {
-            textureView.surfaceTextureListener = surfaceTextureListener
+    init {
+        textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+            override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
+                openCamera()
+            }
+
+            override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {}
+
+            override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
+                textureView.bitmap?.let { bitmap ->
+                    onBitmapReady(bitmap)
+                }
+            }
+
+            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+                closeCamera()
+                return true
+            }
         }
-    }
-
-    private fun startBackgroundThread() {
-        backgroundThread = HandlerThread("CameraBackground").also { it.start() }
-        backgroundHandler = Handler(backgroundThread.looper)
     }
 
     private fun openCamera() {
-        val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
-            // Find the front-facing camera ID
-            val cameraId = manager.cameraIdList.firstOrNull { id ->
-                val characteristics = manager.getCameraCharacteristics(id)
-                characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT
-            } ?: manager.cameraIdList[0] // Fallback to the first camera if no front camera is found
-
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                // Permission is not granted, handle this case appropriately in your app
-                return
+            cameraId = if (isFrontCamera) getFrontCameraId(cameraManager) else getBackCameraId(cameraManager)
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                cameraManager.openCamera(cameraId, stateCallback, null)
             }
-            manager.openCamera(cameraId, stateCallback, backgroundHandler)
         } catch (e: CameraAccessException) {
-            Log.e("CameraHelper", "Error accessing camera", e)
-        } catch (e: SecurityException) {
-            Log.e("CameraHelper", "Camera permission not granted", e)
+            e.printStackTrace()
         }
+    }
+
+    private fun closeCamera() {
+        captureSession?.close()
+        captureSession = null
+        cameraDevice?.close()
+        cameraDevice = null
     }
 
     private val stateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
             cameraDevice = camera
-            createCameraPreviewSession()
+            startPreview()
         }
 
         override fun onDisconnected(camera: CameraDevice) {
-            cameraDevice.close()
+            cameraDevice?.close()
+            cameraDevice = null
         }
 
         override fun onError(camera: CameraDevice, error: Int) {
-            cameraDevice.close()
-            Log.e("CameraHelper", "Camera device error: $error")
+            cameraDevice?.close()
+            cameraDevice = null
         }
     }
 
-    private fun createCameraPreviewSession() {
+    private fun startPreview() {
         try {
-            val texture = textureView.surfaceTexture
-            texture?.setDefaultBufferSize(640, 480)
-            val surface = Surface(texture)
+            val surfaceTexture = textureView.surfaceTexture
+            surfaceTexture?.setDefaultBufferSize(textureView.width, textureView.height)
+            val surface = Surface(surfaceTexture)
 
-            val previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-            previewRequestBuilder.addTarget(surface)
+            val captureRequestBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            captureRequestBuilder?.addTarget(surface)
 
-            cameraDevice.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
+            cameraDevice?.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
                 override fun onConfigured(session: CameraCaptureSession) {
                     captureSession = session
-                    captureSession.setRepeatingRequest(previewRequestBuilder.build(), null, backgroundHandler)
+                    captureRequestBuilder?.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+                    captureSession?.setRepeatingRequest(captureRequestBuilder?.build()!!, null, null)
                 }
 
-                override fun onConfigureFailed(session: CameraCaptureSession) {
-                    Log.e("CameraHelper", "Configuration change")
-                }
+                override fun onConfigureFailed(session: CameraCaptureSession) {}
             }, null)
         } catch (e: CameraAccessException) {
-            Log.e("CameraHelper", "Error creating camera preview session", e)
+            e.printStackTrace()
         }
     }
 
-    private val surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-        override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
-            openCamera()
-        }
+    fun switchCamera() {
+        isFrontCamera = !isFrontCamera
+        closeCamera()
+        openCamera()
+    }
 
-        override fun onSurfaceTextureSizeChanged(surfaceTexture: SurfaceTexture, width: Int, height: Int) {}
-
-        override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
-            return true
-        }
-
-        override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
-            val bitmap = textureView.bitmap
-            if (bitmap != null) {
-                frameListener(bitmap)
+    private fun getFrontCameraId(cameraManager: CameraManager): String {
+        for (cameraId in cameraManager.cameraIdList) {
+            val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+            if (characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT) {
+                return cameraId
             }
         }
+        return "0" // default to back camera if front camera is not found
+    }
+
+    private fun getBackCameraId(cameraManager: CameraManager): String {
+        for (cameraId in cameraManager.cameraIdList) {
+            val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+            if (characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK) {
+                return cameraId
+            }
+        }
+        return "0" // default to back camera if back camera is not found
     }
 
     fun stopCamera() {
-        captureSession.close()
-        cameraDevice.close()
-        stopBackgroundThread()
+        closeCamera()
     }
 
-    private fun stopBackgroundThread() {
-        backgroundThread.quitSafely()
-        try {
-            backgroundThread.join()
-        } catch (e: InterruptedException) {
-            Log.e("CameraHelper", "Error stopping background thread", e)
-        }
+    fun startCamera() {
+        openCamera()
     }
 }

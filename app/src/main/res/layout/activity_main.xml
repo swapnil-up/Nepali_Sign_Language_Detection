@@ -5,16 +5,18 @@
     tools:context=".MainActivity">
 
     <!-- Add this TextView for showing the last detected result -->
+
+    <!-- TextureView for camera preview -->
     <TextView
         android:id="@+id/lastResultTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="4dp"
         android:padding="16dp"
         android:text="Last Detected Result:"
         android:textSize="18sp" />
 
-    <!-- TextureView for camera preview -->
     <TextureView
         android:id="@+id/textureView"
         android:layout_width="match_parent"
@@ -45,8 +47,24 @@
         android:id="@+id/backspaceButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lastResultTextView"
+        android:layout_alignBottom="@+id/textureView"
+        android:layout_alignParentStart="true"
         android:layout_margin="16dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="611dp"
         android:text="Backspace" />
+
+    <Button
+        android:id="@+id/switchCameraButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lastResultTextView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="558dp"
+        android:layout_marginEnd="42dp"
+        android:text="Switch Camera" />
+
 
 </RelativeLayout>
