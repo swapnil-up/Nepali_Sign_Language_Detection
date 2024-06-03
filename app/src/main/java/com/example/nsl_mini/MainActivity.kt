@@ -1,6 +1,7 @@
 package com.example.nsl_mini
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,21 @@ import android.view.TextureView
 import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import android.graphics.SurfaceTexture
+import android.util.Size
+import android.view.Surface
+import android.view.View
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+//import com.google.firebase.database.ktx.database
+//import com.google.firebase.ktx.Firebase
+import android.hardware.camera2.*
+import androidx.appcompat.widget.Toolbar
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var cameraHelper: CameraHelper
@@ -25,10 +41,15 @@ class MainActivity : AppCompatActivity() {
     private var lastDetectedLetter: String? = null
 
     private val CAMERA_PERMISSION_REQUEST_CODE = 100
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navView = findViewById(R.id.nav_view)
 
         // Initialize views
         val textureView = findViewById<TextureView>(R.id.textureView)
@@ -53,6 +74,31 @@ class MainActivity : AppCompatActivity() {
             cameraHelper.switchCamera()
         }
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        // Setup navigation drawer
+        navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    Log.d("MainActivity", "Home selected")
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_learn -> {
+                    Log.d("MainActivity", "Learn selected")
+                    val intent = Intent(this, LearnActivity::class.java)
+                    startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_logout -> {
+                    Log.d("MainActivity", "Logout selected")
+                    logoutUser()
+                }
+            }
+            true
+        }
         // Check camera permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
@@ -61,6 +107,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun logoutUser() {
+        // Clear user session or perform any necessary logout operations
+        // For example, clear shared preferences
+        val sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+
+        // Navigate to LoginActivity
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
