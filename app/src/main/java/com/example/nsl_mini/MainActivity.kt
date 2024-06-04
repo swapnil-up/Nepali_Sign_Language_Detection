@@ -22,11 +22,8 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-//import com.google.firebase.database.ktx.database
-//import com.google.firebase.ktx.Firebase
 import android.hardware.camera2.*
 import androidx.appcompat.widget.Toolbar
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var cameraHelper: CameraHelper
@@ -79,6 +76,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         // Setup navigation drawer
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -99,14 +97,14 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
         // Check camera permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         } else {
-            setupCamera()
+            setupCamera(textureView)
         }
     }
-
 
     private fun logoutUser() {
         // Clear user session or perform any necessary logout operations
@@ -122,20 +120,20 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                setupCamera()
+                val textureView = findViewById<TextureView>(R.id.textureView)
+                setupCamera(textureView)
             } else {
                 Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun setupCamera() {
-        val textureView = findViewById<TextureView>(R.id.textureView)
-
+    private fun setupCamera(textureView: TextureView) {
         gestureRecognizerHelper = GestureRecognizerHelper(this) { result, landmarks ->
             runOnUiThread {
                 resultTextView.text = result
@@ -166,10 +164,26 @@ class MainActivity : AppCompatActivity() {
         }
         gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer_vowel.task")
 
-        cameraHelper = CameraHelper(this, textureView) { bitmap ->
-            gestureRecognizerHelper.recognizeAsync(bitmap, System.currentTimeMillis())
+        textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+            override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
+                cameraHelper = CameraHelper(this@MainActivity, textureView) { bitmap ->
+                    gestureRecognizerHelper.recognizeAsync(bitmap, System.currentTimeMillis())
+                }
+                cameraHelper.startCamera()
+            }
+
+            override fun onSurfaceTextureSizeChanged(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
+                // Handle the change in size if needed
+            }
+
+            override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
+                return true
+            }
+
+            override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
+                // Update the texture if needed
+            }
         }
-        cameraHelper.startCamera()
     }
 
     override fun onDestroy() {
