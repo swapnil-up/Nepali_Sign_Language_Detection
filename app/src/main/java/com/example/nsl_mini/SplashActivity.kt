@@ -36,7 +36,7 @@ class SplashActivity : AppCompatActivity() {
     private fun startNextActivity() {
         if (!hasStartedNextActivity) {
             hasStartedNextActivity = true
-            val intent = Intent(this@SplashActivity, MainActivity::class.java)
+            val intent = Intent(this@SplashActivity, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
