@@ -29,25 +29,21 @@
 
         <TextureView
             android:id="@+id/textureView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="409dp"
+            android:layout_height="537dp"
             android:layout_above="@id/resultTextView"
             android:layout_below="@id/lastResultTextView"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="56dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/lastResultTextView" />
 
         <com.example.nsl_mini.LandmarkOverlayView
             android:id="@+id/landmarkOverlayView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="415dp"
+            android:layout_height="535dp"
             android:layout_above="@id/resultTextView"
             android:layout_below="@id/lastResultTextView"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="56dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lastResultTextView" />
 
         <TextView
             android:id="@+id/resultTextView"
@@ -63,19 +59,18 @@
 
         <Button
             android:id="@+id/backspaceButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="128dp"
+            android:layout_height="55dp"
             android:layout_alignBottom="@+id/textureView"
             android:layout_alignParentStart="true"
             android:layout_margin="16dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="4dp"
             android:text="Backspace"
-            app:layout_constraintBottom_toTopOf="@+id/resultTextView"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textureView"
-            app:layout_constraintVertical_bias="0.963" />
+            app:layout_constraintHorizontal_bias="0.877"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.918" />
 
         <Button
             android:id="@+id/switchCameraButton"
@@ -83,11 +78,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/lastResultTextView"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:text="Switch Camera"
             app:layout_constraintBottom_toTopOf="@+id/resultTextView"
             app:layout_constraintEnd_toStartOf="@+id/backspaceButton"
-            app:layout_constraintHorizontal_bias="0.119"
+            app:layout_constraintHorizontal_bias="0.172"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
