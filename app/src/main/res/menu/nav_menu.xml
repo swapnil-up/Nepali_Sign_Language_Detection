@@ -12,4 +12,8 @@
         android:id="@+id/nav_learn"
         android:icon="@drawable/baseline_book_24"
         android:title="Learn"/>
+    <item
+        android:id="@+id/nav_upload_and_learn"
+        android:icon="@drawable/baseline_book_24"
+        android:title="upload and learn"/>
 </menu>

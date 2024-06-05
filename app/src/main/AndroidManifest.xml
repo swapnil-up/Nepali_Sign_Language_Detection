@@ -15,7 +15,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Gesture गुरु"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NSL_mini"
@@ -28,7 +28,7 @@
 
         <!-- Other activities -->
         <activity
-            android:name=".SplashActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +39,7 @@
             android:name=".LearnActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="false" />
         <activity
             android:name=".ConsonantsActivity"
@@ -59,6 +59,10 @@
         <activity
             android:name=".AdminActivity"
             android:exported="false" />
+        <activity android:name=".PhotoModelActivity"
+            android:exported="false" />
+
+
     </application>
 
 

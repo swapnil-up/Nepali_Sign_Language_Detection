@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
@@ -16,14 +18,10 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import android.graphics.SurfaceTexture
-import android.util.Size
-import android.view.Surface
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.hardware.camera2.*
-import androidx.appcompat.widget.Toolbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var cameraHelper: CameraHelper
@@ -36,6 +34,9 @@ class MainActivity : AppCompatActivity() {
 
     private var cumulativeResult = StringBuilder()
     private var lastDetectedLetter: String? = null
+    private var isSwitchingCamera = false
+    private val switchCameraDebounceTime = 1000L  // 1 second debounce time
+    private val handler = Handler(Looper.getMainLooper())
 
     private val CAMERA_PERMISSION_REQUEST_CODE = 100
     private lateinit var drawerLayout: DrawerLayout
@@ -66,9 +67,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Set up switch camera button click listener
+        // Set up switch camera button click listener with debouncing
         switchCameraButton.setOnClickListener {
-            cameraHelper.switchCamera()
+            Log.d("MainActivity", "Switch camera button clicked")
+            if (!isSwitchingCamera) {
+                isSwitchingCamera = true
+                switchCameraButton.isEnabled = false
+                Log.d("MainActivity", "Switching camera started")
+                cameraHelper.switchCamera {
+                    Log.d("MainActivity", "Switching camera completed")
+                    isSwitchingCamera = false
+                    switchCameraButton.isEnabled = true
+                }
+                // Re-enable the button after debounce time
+                handler.postDelayed({
+                    switchCameraButton.isEnabled = true
+                }, switchCameraDebounceTime)
+            } else {
+                Log.d("MainActivity", "Camera is already switching")
+            }
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -87,6 +104,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_learn -> {
                     Log.d("MainActivity", "Learn selected")
                     val intent = Intent(this, LearnActivity::class.java)
+                    startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_upload_and_learn -> {
+                    Log.d("MainActivity", "Learn selected")
+                    val intent = Intent(this, PhotoModelActivity::class.java)
                     startActivity(intent)
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
@@ -166,6 +189,7 @@ class MainActivity : AppCompatActivity() {
 
         textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
+                Log.d("MainActivity", "SurfaceTexture available")
                 cameraHelper = CameraHelper(this@MainActivity, textureView) { bitmap ->
                     gestureRecognizerHelper.recognizeAsync(bitmap, System.currentTimeMillis())
                 }
@@ -177,6 +201,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
+                Log.d("MainActivity", "SurfaceTexture destroyed")
                 return true
             }
 

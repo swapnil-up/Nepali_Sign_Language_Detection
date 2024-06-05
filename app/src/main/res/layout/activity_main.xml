@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -17,11 +18,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="56dp"
             android:padding="16dp"
             android:text="Last Detected Result:"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <!-- LandmarkOverlayView for drawing landmarks -->
 
@@ -29,8 +37,8 @@
 
         <TextureView
             android:id="@+id/textureView"
-            android:layout_width="409dp"
-            android:layout_height="537dp"
+            android:layout_width="415dp"
+            android:layout_height="560dp"
             android:layout_above="@id/resultTextView"
             android:layout_below="@id/lastResultTextView"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,17 +46,17 @@
 
         <com.example.nsl_mini.LandmarkOverlayView
             android:id="@+id/landmarkOverlayView"
-            android:layout_width="415dp"
-            android:layout_height="535dp"
+            android:layout_width="match_parent"
+            android:layout_height="562dp"
             android:layout_above="@id/resultTextView"
             android:layout_below="@id/lastResultTextView"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lastResultTextView" />
 
         <TextView
             android:id="@+id/resultTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:layout_alignParentBottom="true"
             android:background="@color/black"
             android:padding="16dp"
@@ -67,10 +75,10 @@
             android:text="Backspace"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.877"
+            app:layout_constraintHorizontal_bias="0.858"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.918" />
+            app:layout_constraintVertical_bias="0.937" />
 
         <Button
             android:id="@+id/switchCameraButton"
@@ -78,14 +86,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/lastResultTextView"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="4dp"
             android:text="Switch Camera"
             app:layout_constraintBottom_toTopOf="@+id/resultTextView"
             app:layout_constraintEnd_toStartOf="@+id/backspaceButton"
             app:layout_constraintHorizontal_bias="0.172"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
