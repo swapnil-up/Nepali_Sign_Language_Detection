@@ -1,12 +1,11 @@
 package com.example.nsl_mini
 
-
 import UserData
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.nsl_mini.databinding.ActivityAdminBinding // Correct package name
+import com.example.nsl_mini.databinding.ActivityAdminBinding
 import com.google.firebase.database.*
 
 class AdminActivity : AppCompatActivity() {
@@ -47,6 +46,8 @@ class AdminActivity : AppCompatActivity() {
                         userList.add(user)
                     }
                 }
+                // Sort the list by ID in descending order (assuming ID is a timestamp)
+                userList.sortByDescending { it.id }
                 userAdapter.notifyDataSetChanged()
             }
 
