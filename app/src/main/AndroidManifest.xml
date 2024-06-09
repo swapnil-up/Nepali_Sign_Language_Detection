@@ -7,7 +7,13 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
+
+
 
     <application
         android:name=".MyApp"
@@ -28,7 +34,7 @@
 
         <!-- Other activities -->
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +45,7 @@
             android:name=".LearnActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".ConsonantsActivity"
@@ -61,8 +67,8 @@
             android:exported="false" />
         <activity android:name=".PhotoModelActivity"
             android:exported="false" />
-
-
+        <activity android:name=".UserProfileActivity"
+            android:exported="false" />
     </application>
 
 

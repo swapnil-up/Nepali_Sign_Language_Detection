@@ -80,6 +80,12 @@ class LoginActivity : AppCompatActivity() {
                             for (userSnapshot in dataSnapshot.children) {
                                 val userData = userSnapshot.getValue(UserData::class.java)
                                 if (userData != null && userData.password == password) {
+                                    // Save user ID in SharedPreferences
+                                    val sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
+                                    val editor = sharedPreferences.edit()
+                                    editor.putString("user_id", userData.id)
+                                    editor.apply()
+
                                     Toast.makeText(this@LoginActivity, "Login successful", Toast.LENGTH_SHORT).show()
                                     redirectUser(userData.role)
                                     return
@@ -97,6 +103,7 @@ class LoginActivity : AppCompatActivity() {
                 })
         }
     }
+
 
     private fun redirectUser(role: String?) {
         when (role) {

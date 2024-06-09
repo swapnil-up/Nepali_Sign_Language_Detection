@@ -1,32 +1,30 @@
+// MainActivity.kt
 package com.example.nsl_mini
 
+import UserData
 import android.Manifest
-import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.SurfaceTexture
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore
 import android.util.Log
-import android.view.TextureView
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import android.view.TextureView
+import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import java.io.IOException
+import android.graphics.SurfaceTexture
+import android.view.View
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import android.hardware.camera2.*
+import android.widget.ImageView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var cameraHelper: CameraHelper
@@ -43,16 +41,9 @@ class MainActivity : AppCompatActivity() {
     private val switchCameraDebounceTime = 1000L  // 1 second debounce time
     private val handler = Handler(Looper.getMainLooper())
 
+    private val CAMERA_PERMISSION_REQUEST_CODE = 100
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
-    private lateinit var profileImageView: ImageView
-
-    companion object {
-        private const val PICK_IMAGE_REQUEST = 1
-        private const val READ_STORAGE_PERMISSION_REQUEST_CODE = 2
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 100
-        private const val CAPTURE_IMAGE_REQUEST = 3
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,35 +59,6 @@ class MainActivity : AppCompatActivity() {
         lastResultTextView = findViewById(R.id.lastResultTextView)
         backspaceButton = findViewById(R.id.backspaceButton)
         switchCameraButton = findViewById(R.id.switchCameraButton)
-
-        // Set up profile image view click listener
-        val headerView = navView.getHeaderView(0)
-        profileImageView = headerView.findViewById(R.id.profileImageView)
-        profileImageView.setOnClickListener {
-            val options = arrayOf("Choose from Gallery", "Capture Photo")
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Select Option")
-            builder.setItems(options) { _, which ->
-                when (which) {
-                    0 -> {
-                        if (checkPermissionForReadExternalStorage()) {
-                            openImageSelector()
-                        } else {
-                            requestPermissionForReadExternalStorage()
-                        }
-                    }
-                    1 -> {
-                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                            openCamera()
-                        } else {
-                            requestPermissionForCamera()
-                        }
-                    }
-                }
-            }
-            builder.show()
-        }
-
 
         // Set up backspace button click listener
         backspaceButton.setOnClickListener {
@@ -142,120 +104,40 @@ class MainActivity : AppCompatActivity() {
                     Log.d("MainActivity", "Home selected")
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
-
                 R.id.nav_learn -> {
                     Log.d("MainActivity", "Learn selected")
                     val intent = Intent(this, LearnActivity::class.java)
                     startActivity(intent)
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
-
                 R.id.nav_upload_and_learn -> {
-                    Log.d("MainActivity", "Upload and Learn selected")
+                    Log.d("MainActivity", "Learn selected")
                     val intent = Intent(this, PhotoModelActivity::class.java)
                     startActivity(intent)
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
-
                 R.id.nav_logout -> {
                     Log.d("MainActivity", "Logout selected")
                     logoutUser()
                 }
+
             }
             true
         }
 
         // Check camera permission
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.CAMERA),
-                CAMERA_PERMISSION_REQUEST_CODE
-            )
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         } else {
             setupCamera(textureView)
         }
-    }
-    private fun openCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, CAPTURE_IMAGE_REQUEST)
-    }
 
-    private fun requestPermissionForCamera() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.CAMERA),
-            CAMERA_PERMISSION_REQUEST_CODE
-        )
-    }
-    private fun checkPermissionForReadExternalStorage(): Boolean {
-        val result =
-            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-        return result == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestPermissionForReadExternalStorage() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-            READ_STORAGE_PERMISSION_REQUEST_CODE
-        )
-    }
-
-    private fun openImageSelector() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, PICK_IMAGE_REQUEST)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            READ_STORAGE_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    openImageSelector()
-                } else {
-                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-                }
-            }
-            CAMERA_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    openCamera()
-                } else {
-                    Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
-                }
-            }
+        // Profile image click listener
+        val profileImageView = navView.getHeaderView(0).findViewById<ImageView>(R.id.profileImageView)
+        profileImageView.setOnClickListener {
+            openUserProfile()
         }
     }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                PICK_IMAGE_REQUEST -> {
-                    val selectedImageUri: Uri? = data?.data
-                    try {
-                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
-                        profileImageView.setImageBitmap(bitmap)
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                CAPTURE_IMAGE_REQUEST -> {
-                    val photo = data?.extras?.get("data") as Bitmap
-                    profileImageView.setImageBitmap(photo)
-                }
-            }
-        }
-    }
-
 
     private fun logoutUser() {
         // Clear user session or perform any necessary logout operations
@@ -270,6 +152,37 @@ class MainActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+
+    private fun openUserProfile() {
+        // Retrieve user data from your storage (e.g., SharedPreferences)
+        val userData: UserData? = getUserData()
+
+        // Pass user data to UserProfileActivity
+        val intent = Intent(this, UserProfileActivity::class.java)
+        intent.putExtra("userData", userData)
+        startActivity(intent)
+    }
+
+    private fun getUserData(): UserData? {
+        // Dummy implementation to get user data, replace with your own method
+        val userId = "user123"
+        val username = "JohnDoe"
+        val phoneNumber = "1234567890"
+        val role = "user"
+        return UserData(userId, username, phoneNumber, "", role)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val textureView = findViewById<TextureView>(R.id.textureView)
+                setupCamera(textureView)
+            } else {
+                Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupCamera(textureView: TextureView) {
@@ -329,8 +242,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::cameraHelper.isInitialized) {
-            cameraHelper.stopCamera()
-        }
+        cameraHelper.stopCamera()
     }
 }

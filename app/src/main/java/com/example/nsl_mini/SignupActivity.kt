@@ -65,7 +65,7 @@ class SignupActivity : AppCompatActivity() {
     private fun validateUsername(username: String): String? {
         val specialCharactersRegex = Regex("[^a-zA-Z0-9_-]")
         return when {
-            username.length !in 8..15 -> "Username must be between 8 and 15 characters"
+            username.length !in 3..20 -> "Username must be between 3 and 20 characters"
             username.contains(" ") -> "Username must not contain spaces"
             specialCharactersRegex.containsMatchIn(username) -> "Username must not contain special characters"
             else -> null

@@ -38,6 +38,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -46,6 +47,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -53,6 +55,7 @@
             android:text="Phone Number"
             android:textSize="16sp"
             android:textStyle="bold" />
+
 
         <TextView
             android:layout_width="0dp"

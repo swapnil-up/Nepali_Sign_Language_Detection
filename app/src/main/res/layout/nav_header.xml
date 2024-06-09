@@ -10,7 +10,10 @@
         android:id="@+id/profileImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/circle" />
+        android:src="@drawable/circle"
+        android:clickable="true"
+        android:onClick="openUserProfile"
+         />
 
     <TextView
         android:layout_width="wrap_content"

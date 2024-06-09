@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="1"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/usernameTextView"
@@ -21,7 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Username"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/phoneNumberTextView"
@@ -29,7 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Phone Number"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/roleTextView"
@@ -37,5 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Role"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:gravity="center" />
 </LinearLayout>
