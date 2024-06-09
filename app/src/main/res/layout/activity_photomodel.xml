@@ -9,28 +9,30 @@
         android:id="@+id/selectImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Image"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="357dp"
+        android:layout_marginEnd="133dp"
+        android:text="Select Image" />
 
     <ImageView
         android:id="@+id/selectedImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/selectImageButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:contentDescription="Selected Image"/>
+        android:layout_width="205dp"
+        android:layout_height="219dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="99dp"
+        android:background="@drawable/rectangle"
+        android:contentDescription="Selected Image" />
 
     <TextView
         android:id="@+id/resultTextViewStatic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/selectedImageView"
-        android:layout_marginTop="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="164dp"
+        android:gravity="center"
         android:padding="16dp"
         android:text="Result"
-        android:textSize="18sp"
-        android:gravity="center"/>
+        android:textSize="18sp" />
 
 </RelativeLayout>

@@ -1,3 +1,4 @@
+// UserProfileActivity.kt
 package com.example.nsl_mini
 
 import UserData
@@ -112,6 +113,9 @@ class UserProfileActivity : AppCompatActivity() {
                     val userRef = databaseReference.child(userId)
                     userRef.child("profileImageUrl").setValue(downloadUri.toString())
                         .addOnSuccessListener {
+                            // Save profile image URL to shared preferences
+                            sharedPreferences.edit().putString("profile_image_url", downloadUri.toString()).apply()
+
                             Toast.makeText(this, "Photo uploaded successfully", Toast.LENGTH_SHORT)
                                 .show()
                             Log.d("UserProfileActivity", "Photo URL saved successfully")
@@ -136,4 +140,3 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 }
-

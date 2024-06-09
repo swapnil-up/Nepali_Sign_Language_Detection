@@ -8,12 +8,13 @@
 
     <ImageView
         android:id="@+id/profileImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/circle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/circle"
         android:clickable="true"
-        android:onClick="openUserProfile"
-         />
+        android:scaleType="centerCrop"
+        android:padding="2dp"
+        android:onClick="openUserProfile" />
 
     <TextView
         android:layout_width="wrap_content"

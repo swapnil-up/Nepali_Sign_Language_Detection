@@ -9,43 +9,49 @@
 
         <TextView
             android:id="@+id/usernameTextView"
-            android:layout_width="224dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="380dp"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="396dp"
+            android:background="@drawable/user_item_background"
             android:text="Username"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/phoneNumberTextView"
-            android:layout_width="256dp"
-            android:layout_height="78dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="52dp"
+            android:background="@drawable/user_item_background"
             android:text="Phone Number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
 
         <TextView
             android:id="@+id/roleTextView"
-            android:layout_width="278dp"
-            android:layout_height="78dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="52dp"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/user_item_background"
             android:text="Role"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/phoneNumberTextView" />
 
         <ImageView
             android:id="@+id/profileImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/rectangle"
             android:contentDescription="@string/profile_image"
+            android:scaleType="centerCrop"
+            android:padding="2dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

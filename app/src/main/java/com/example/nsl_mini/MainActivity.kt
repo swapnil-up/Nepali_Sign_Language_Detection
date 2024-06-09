@@ -4,6 +4,7 @@ package com.example.nsl_mini
 import UserData
 import android.Manifest
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
@@ -25,8 +26,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.hardware.camera2.*
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var cameraHelper: CameraHelper
     private lateinit var gestureRecognizerHelper: GestureRecognizerHelper
     private lateinit var landmarkOverlayView: LandmarkOverlayView
@@ -44,6 +47,14 @@ class MainActivity : AppCompatActivity() {
     private val CAMERA_PERMISSION_REQUEST_CODE = 100
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
+    private lateinit var sharedPreferences: SharedPreferences
+
+    private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+        if (key == "profile_image_url") {
+            Log.d("MainActivity", "Profile image URL changed")
+            loadProfileImage()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +62,10 @@ class MainActivity : AppCompatActivity() {
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
+        sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
+
+        // Register SharedPreferences listener
+        sharedPreferences.registerOnSharedPreferenceChangeListener(prefsListener)
 
         // Initialize views
         val textureView = findViewById<TextureView>(R.id.textureView)
@@ -137,12 +152,26 @@ class MainActivity : AppCompatActivity() {
         profileImageView.setOnClickListener {
             openUserProfile()
         }
+
+        // Load user profile image
+        loadProfileImage()
+    }
+
+    private fun loadProfileImage() {
+        val profileImageUrl = sharedPreferences.getString("profile_image_url", null)
+        val profileImageView = navView.getHeaderView(0).findViewById<ImageView>(R.id.profileImageView)
+        if (!profileImageUrl.isNullOrEmpty()) {
+            Log.d("MainActivity", "Profile image URL: $profileImageUrl")  // Log the profile image URL
+            Glide.with(this).load(profileImageUrl).circleCrop()
+                .into(profileImageView)
+        } else {
+            Log.d("MainActivity", "Profile image URL is null or empty")
+        }
     }
 
     private fun logoutUser() {
         // Clear user session or perform any necessary logout operations
         // For example, clear shared preferences
-        val sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
@@ -155,22 +184,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openUserProfile() {
-        // Retrieve user data from your storage (e.g., SharedPreferences)
-        val userData: UserData? = getUserData()
-
-        // Pass user data to UserProfileActivity
         val intent = Intent(this, UserProfileActivity::class.java)
-        intent.putExtra("userData", userData)
         startActivity(intent)
-    }
-
-    private fun getUserData(): UserData? {
-        // Dummy implementation to get user data, replace with your own method
-        val userId = "user123"
-        val username = "JohnDoe"
-        val phoneNumber = "1234567890"
-        val role = "user"
-        return UserData(userId, username, phoneNumber, "", role)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -216,7 +231,7 @@ class MainActivity : AppCompatActivity() {
         }
         gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer_vowel.task")
 
-        textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+        val listener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
                 Log.d("MainActivity", "SurfaceTexture available")
                 cameraHelper = CameraHelper(this@MainActivity, textureView) { bitmap ->
@@ -238,10 +253,12 @@ class MainActivity : AppCompatActivity() {
                 // Update the texture if needed
             }
         }
+        textureView.surfaceTextureListener = listener
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cameraHelper.stopCamera()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(prefsListener)
     }
 }
