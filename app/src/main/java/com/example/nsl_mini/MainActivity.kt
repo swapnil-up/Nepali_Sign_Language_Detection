@@ -1,5 +1,4 @@
-// MainActivity.kt
-package com.example.nsl_mini
+ package com.example.nsl_mini
 
 import UserData
 import android.Manifest
@@ -75,15 +74,26 @@ class MainActivity : AppCompatActivity() {
         backspaceButton = findViewById(R.id.backspaceButton)
         switchCameraButton = findViewById(R.id.switchCameraButton)
 
-        // Set up backspace button click listener
         backspaceButton.setOnClickListener {
             synchronized(this) {
                 if (cumulativeResult.isNotEmpty()) {
-                    cumulativeResult.deleteCharAt(cumulativeResult.length - 1)
+                    Log.d("MainActivity", "Current cumulativeResult: $cumulativeResult")
+                    if (cumulativeResult.endsWith("अं")) {
+                        Log.d("MainActivity", "Removing 'अं'")
+                        cumulativeResult.delete(cumulativeResult.length - 2, cumulativeResult.length)
+                    } else if (cumulativeResult.endsWith("अः") || cumulativeResult.endsWith("अ:")) {
+                        Log.d("MainActivity", "Removing 'अः' or 'अ:'")
+                        cumulativeResult.delete(cumulativeResult.length - 2, cumulativeResult.length)
+                    } else {
+                        Log.d("MainActivity", "Removing last character")
+                        cumulativeResult.deleteCharAt(cumulativeResult.length - 1)
+                    }
                     lastResultTextView.text = "Last Detected Result: ${cumulativeResult.toString()}"
                 }
             }
         }
+
+
 
         // Set up switch camera button click listener with debouncing
         switchCameraButton.setOnClickListener {
