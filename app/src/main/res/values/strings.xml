@@ -15,4 +15,5 @@
     <string name="phone_number">Phone Number</string>
     <string name="google_app_id">1:25469869772:android:c08ad405b2da2f99196c69</string>
     <string name="profile_image" />
+    <string name="open_drawer" />
 </resources>

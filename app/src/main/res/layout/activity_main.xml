@@ -63,8 +63,8 @@
 
         <Button
             android:id="@+id/backspaceButton"
-            android:layout_width="128dp"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textureView"
             android:layout_alignParentStart="true"
             android:layout_margin="16dp"
@@ -92,8 +92,8 @@
         <!-- New Clear Button -->
         <Button
             android:id="@+id/clearButton"
-            android:layout_width="100dp"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/backspaceButton"
             android:layout_alignBottom="@+id/textureView"
             android:layout_alignParentStart="true"

@@ -9,6 +9,16 @@
     android:background="@color/blue"
     android:gravity="center_vertical">
 
+    <!-- ImageButton to open navigation drawer -->
+    <ImageButton
+        android:id="@+id/openDrawerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_menu"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/open_drawer"/>
+
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"

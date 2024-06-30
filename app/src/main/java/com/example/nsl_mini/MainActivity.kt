@@ -24,6 +24,7 @@ import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.hardware.camera2.*
+import android.widget.ImageButton
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var backspaceButton: Button
     private lateinit var switchCameraButton: Button
     private lateinit var clearButton: Button
+    private lateinit var openDrawerButton: ImageButton  // Change the type to ImageButton
 
     private var cumulativeResult = StringBuilder()
     private var lastDetectedLetter: String? = null
@@ -76,6 +78,11 @@ class MainActivity : AppCompatActivity() {
         switchCameraButton = findViewById(R.id.switchCameraButton)
         clearButton = findViewById(R.id.clearButton)  // Initialize Clear button
 
+        // Find the openDrawerButton and set an OnClickListener
+        openDrawerButton = findViewById(R.id.openDrawerButton)  // Change the type here too
+        openDrawerButton.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
 
         backspaceButton.setOnClickListener {
             synchronized(this) {
