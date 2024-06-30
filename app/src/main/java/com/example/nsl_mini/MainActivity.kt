@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lastResultTextView: TextView
     private lateinit var backspaceButton: Button
     private lateinit var switchCameraButton: Button
+    private lateinit var clearButton: Button
 
     private var cumulativeResult = StringBuilder()
     private var lastDetectedLetter: String? = null
@@ -73,6 +74,8 @@ class MainActivity : AppCompatActivity() {
         lastResultTextView = findViewById(R.id.lastResultTextView)
         backspaceButton = findViewById(R.id.backspaceButton)
         switchCameraButton = findViewById(R.id.switchCameraButton)
+        clearButton = findViewById(R.id.clearButton)  // Initialize Clear button
+
 
         backspaceButton.setOnClickListener {
             synchronized(this) {
@@ -92,8 +95,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-
+        clearButton.setOnClickListener {
+            synchronized(this) {
+                cumulativeResult.clear()
+                lastResultTextView.text = "Last Detected Result: "
+                Log.d("MainActivity", "Detected result cleared")
+            }
+        }
 
         // Set up switch camera button click listener with debouncing
         switchCameraButton.setOnClickListener {
