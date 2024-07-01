@@ -5,7 +5,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
-class ConsonantsActivity : AppCompatActivity() {
+class ConsonantsActivity : BaseActivity() {
     private lateinit var consonantImage: ImageView
     private lateinit var consonantSignImage: ImageView
     private lateinit var prevConsonantButton: Button
@@ -100,6 +100,8 @@ class ConsonantsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consonants)
+        setupDrawer()
+
 
         consonantImage = findViewById(R.id.consonant_image)
         consonantSignImage = findViewById(R.id.consonant_sign_image)

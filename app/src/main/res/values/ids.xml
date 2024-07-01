@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="selectImageButton" type="id" />
+    <item name="selectedImageView" type="id" />
+    <item name="resultTextViewStatic" type="id" />
+</resources>

@@ -5,7 +5,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
-class NumbersActivity : AppCompatActivity() {
+class NumbersActivity : BaseActivity() {
     private lateinit var numberImage: ImageView
     private lateinit var signImage: ImageView
     private lateinit var prevButton: Button
@@ -36,6 +36,7 @@ class NumbersActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_numbers)
+        setupDrawer()
 
         numberImage = findViewById(R.id.number_image)
         signImage = findViewById(R.id.sign_image)

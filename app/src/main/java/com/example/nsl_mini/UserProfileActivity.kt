@@ -16,7 +16,7 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
-class UserProfileActivity : AppCompatActivity() {
+class UserProfileActivity : BaseActivity() {
 
     private lateinit var binding: ActivityUserProfileBinding
     private lateinit var databaseReference: DatabaseReference
@@ -27,6 +27,7 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupDrawer()
 
         // Initialize Firebase references
         databaseReference = FirebaseDatabase.getInstance().reference.child("users")

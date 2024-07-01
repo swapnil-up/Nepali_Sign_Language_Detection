@@ -17,7 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.InputStream
 
-class PhotoModelActivity : AppCompatActivity() {
+class PhotoModelActivity : BaseActivity() {
 
     private val PICK_IMAGE_REQUEST = 1
     private lateinit var selectImageButton: Button
@@ -28,6 +28,7 @@ class PhotoModelActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photomodel)
+        setupDrawer()
 
         selectImageButton = findViewById(R.id.selectImageButton)
         selectedImageView = findViewById(R.id.selectedImageView)

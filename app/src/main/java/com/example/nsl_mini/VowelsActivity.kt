@@ -5,7 +5,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
-class VowelsActivity : AppCompatActivity() {
+class VowelsActivity : BaseActivity() {
     private lateinit var vowelImage: ImageView
     private lateinit var vowelSignImage: ImageView
     private lateinit var prevVowelButton: Button
@@ -48,6 +48,7 @@ class VowelsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vowels)
+        setupDrawer()
 
         vowelImage = findViewById(R.id.vowel_image)
         vowelSignImage = findViewById(R.id.vowel_sign_image)
