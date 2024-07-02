@@ -2,7 +2,6 @@ package com.example.nsl_mini
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 
@@ -11,7 +10,7 @@ class LearnActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_learn)
         setupDrawer()
-        
+
         val cardVowels = findViewById<CardView>(R.id.card_vowels)
         val cardConsonants = findViewById<CardView>(R.id.card_consonants)
         val cardNumbers = findViewById<CardView>(R.id.card_numbers)
@@ -30,5 +29,15 @@ class LearnActivity : BaseActivity() {
             val intent = Intent(this, NumbersActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onBackPressed() {
+        // Navigate to MainActivity explicitly
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+
+        // Call super to handle default back button behavior
+        super.onBackPressed()
     }
 }

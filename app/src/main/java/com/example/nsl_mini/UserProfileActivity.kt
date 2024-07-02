@@ -65,6 +65,12 @@ class UserProfileActivity : BaseActivity() {
                                 .load(it.profileImageUrl)
                                 .into(binding.profileImageView)
                         }
+                        // Save username to SharedPreferences
+                        val sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putString("username", it.username)
+                        editor.putString("profile_image_url", it.profileImageUrl)
+                        editor.apply()
                     }
                 } else {
                     // Document does not exist
@@ -140,4 +146,15 @@ class UserProfileActivity : BaseActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        // Navigate to MainActivity explicitly
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+
+        // Call super to handle default back button behavior
+        super.onBackPressed()
+    }
+
 }

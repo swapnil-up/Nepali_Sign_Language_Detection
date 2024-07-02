@@ -111,4 +111,14 @@ class PhotoModelActivity : BaseActivity() {
             // Permission denied, handle accordingly
         }
     }
+    override fun onBackPressed() {
+        // Navigate to MainActivity explicitly
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+
+        // Call super to handle default back button behavior
+        super.onBackPressed()
+    }
+
 }

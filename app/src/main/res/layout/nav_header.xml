@@ -14,12 +14,20 @@
         android:clickable="true"
         android:scaleType="centerCrop"
         android:padding="2dp"
-        android:onClick="openUserProfile" />
+        android:contentDescription="Profile Image" />
 
     <TextView
+        android:id="@+id/welcomeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Username"
+        android:text="Welcome "
+        android:textColor="@android:color/white"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/usernameTextViewNav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:textSize="20sp"/>
 </LinearLayout>

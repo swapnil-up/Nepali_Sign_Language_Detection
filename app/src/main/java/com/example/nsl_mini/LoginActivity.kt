@@ -50,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
     private fun validateUsername(username: String): String? {
         return when {
             username.isEmpty() -> "Username is required"
-            username.length !in 8..15 -> "Username must be between 8 and 15 characters"
+            username.length !in 3..15 -> "Username must be between 8 and 15 characters"
             username.contains(" ") -> "Username must not contain spaces"
             !username.matches(Regex("^[a-zA-Z0-9_]+$")) -> "Username can only contain letters, numbers, and underscores"
             else -> null
