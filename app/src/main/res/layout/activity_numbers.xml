@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/splash"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,15 +28,19 @@
 
             <ImageView
                 android:id="@+id/sign_image"
-                android:layout_width="187dp"
-                android:layout_height="250dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_width="257dp"
+                android:layout_height="236dp"
+                android:layout_marginBottom="16dp"
+                android:foregroundGravity="center"
+                android:background="@drawable/rectangle" />
 
             <ImageView
                 android:id="@+id/number_image"
-                android:layout_width="187dp"
-                android:layout_height="276dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_width="257dp"
+                android:layout_height="236dp"
+                android:layout_marginBottom="16dp"
+                android:foregroundGravity="center"
+                android:background="@drawable/rectangle" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,5 +70,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
+        android:background="@color/splash"
         app:menu="@menu/nav_menu"/>
 </androidx.drawerlayout.widget.DrawerLayout>

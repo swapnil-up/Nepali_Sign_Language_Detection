@@ -24,6 +24,7 @@ import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.hardware.camera2.*
+import android.view.MotionEvent
 import android.widget.ImageButton
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -32,6 +33,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import android.widget.HorizontalScrollView
 
 class MainActivity : BaseActivity() {
 
@@ -44,6 +46,7 @@ class MainActivity : BaseActivity() {
     private lateinit var switchCameraButton: Button
     private lateinit var clearButton: Button
     private lateinit var openDrawerButton: ImageButton
+    private lateinit var horizontalScrollView: HorizontalScrollView
 
     private var cumulativeResult = StringBuilder()
     private var lastDetectedLetter: String? = null
@@ -68,9 +71,11 @@ class MainActivity : BaseActivity() {
 
         // Initialize views
         val textureView = findViewById<TextureView>(R.id.textureView)
+        lastResultTextView = findViewById(R.id.lastResultTextView)
+        lastResultTextView.isSelected = true
+        horizontalScrollView = findViewById(R.id.horizontalScrollView)
         landmarkOverlayView = findViewById(R.id.landmarkOverlayView)
         resultTextView = findViewById(R.id.resultTextView)
-        lastResultTextView = findViewById(R.id.lastResultTextView)
         backspaceButton = findViewById(R.id.backspaceButton)
         switchCameraButton = findViewById(R.id.switchCameraButton)
         clearButton = findViewById(R.id.clearButton)
@@ -86,13 +91,16 @@ class MainActivity : BaseActivity() {
                         cumulativeResult.deleteCharAt(cumulativeResult.length - 1)
                     }
                     lastResultTextView.text = "Last Detected Result: ${cumulativeResult.toString()}"
+                    scrollToEnd()
                 }
             }
         }
+
         clearButton.setOnClickListener {
             synchronized(this) {
                 cumulativeResult.clear()
                 lastResultTextView.text = "Last Detected Result: "
+                scrollToEnd()
             }
         }
 
@@ -165,6 +173,7 @@ class MainActivity : BaseActivity() {
                         cumulativeResult.append(currentLetter)
                         lastDetectedLetter = currentLetter
                         lastResultTextView.text = "Last Detected Result: ${cumulativeResult.toString()}"
+                        scrollToEnd()
                     }
                 }
             }
@@ -184,6 +193,12 @@ class MainActivity : BaseActivity() {
             override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {}
         }
         textureView.surfaceTextureListener = listener
+    }
+
+    private fun scrollToEnd() {
+        horizontalScrollView.post {
+            horizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

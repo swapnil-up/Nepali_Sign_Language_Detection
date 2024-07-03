@@ -127,6 +127,7 @@ open class BaseActivity : AppCompatActivity() {
             Glide.with(this).load(profileImageUrl).circleCrop().into(profileImageView)
         } else {
             profileImageView.setImageResource(R.drawable.default_profile_image) // Placeholder image
+            Glide.with(this).load(profileImageUrl).circleCrop().into(profileImageView)
         }
     }
 

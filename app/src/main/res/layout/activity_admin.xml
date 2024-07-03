@@ -82,6 +82,7 @@
         android:id="@+id/navigationViewAdmin"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:background="@color/splash"
         android:layout_gravity="start"
         app:menu="@menu/nav_menu_admin"/>
 </androidx.drawerlayout.widget.DrawerLayout>

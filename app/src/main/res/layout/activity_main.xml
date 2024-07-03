@@ -7,23 +7,33 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/lastResultTextView"
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_marginTop="56dp"
             android:padding="16dp"
-            android:text="Last Detected Result:"
-            android:textSize="18sp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/lastResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="Last Detected Result:"
+                android:textSize="18sp" />
+        </HorizontalScrollView>
 
         <include
             android:id="@+id/toolbarUser"
@@ -36,18 +46,16 @@
             android:layout_width="415dp"
             android:layout_height="560dp"
             android:layout_above="@id/resultTextView"
-            android:layout_below="@id/lastResultTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lastResultTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
         <com.example.nsl_mini.LandmarkOverlayView
             android:id="@+id/landmarkOverlayView"
             android:layout_width="match_parent"
             android:layout_height="562dp"
             android:layout_above="@id/resultTextView"
-            android:layout_below="@id/lastResultTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lastResultTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
         <TextView
             android:id="@+id/resultTextView"
@@ -80,7 +88,6 @@
             android:id="@+id/switchCameraButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lastResultTextView"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="4dp"
             android:text="Switch Camera"
@@ -89,7 +96,6 @@
             app:layout_constraintHorizontal_bias="0.172"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- New Clear Button -->
         <Button
             android:id="@+id/clearButton"
             android:layout_width="wrap_content"
@@ -114,5 +120,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
+        android:background="@color/splash"
         app:menu="@menu/nav_menu"/>
 </androidx.drawerlayout.widget.DrawerLayout>

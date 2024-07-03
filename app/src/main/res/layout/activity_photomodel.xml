@@ -4,6 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/splash"
     tools:context=".PhotoModelActivity">
 
     <LinearLayout
@@ -28,6 +29,14 @@
             android:padding="16dp">
 
             <!-- Select Image Button -->
+            <ImageView
+                android:id="@+id/selectedImageView"
+                android:layout_width="363dp"
+                android:layout_height="331dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rectangle"
+                android:contentDescription="Selected Image" />
+
             <Button
                 android:id="@+id/selectImageButton"
                 android:layout_width="wrap_content"
@@ -36,13 +45,6 @@
                 android:text="Select Image" />
 
             <!-- Selected Image View -->
-            <ImageView
-                android:id="@+id/selectedImageView"
-                android:layout_width="205dp"
-                android:layout_height="219dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/rectangle"
-                android:contentDescription="Selected Image" />
 
             <!-- Result Text View -->
             <TextView
@@ -52,7 +54,8 @@
                 android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="Result"
+                android:background="@drawable/rectangle"
+                android:text="The detected Result is :"
                 android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
@@ -63,5 +66,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
+        android:background="@color/splash"
         app:menu="@menu/nav_menu"/>
 </androidx.drawerlayout.widget.DrawerLayout>
