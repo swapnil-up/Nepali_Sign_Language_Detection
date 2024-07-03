@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Select Image"
-                android:background="@drawable/background_box"
+                android:backgroundTint="@color/orange"
                 />
 
             <!-- Selected Image View -->

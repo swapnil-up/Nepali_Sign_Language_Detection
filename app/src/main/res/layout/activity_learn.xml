@@ -39,6 +39,7 @@
                     android:gravity="center"
                     android:padding="16dp"
                     android:text="नेपाली स्वर"
+                    android:background="@color/orange"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </androidx.cardview.widget.CardView>
@@ -58,6 +59,7 @@
                     android:gravity="center"
                     android:padding="16dp"
                     android:text="नेपाली व्यञ्जन"
+                    android:background="@color/orange"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </androidx.cardview.widget.CardView>
@@ -77,6 +79,7 @@
                     android:gravity="center"
                     android:padding="16dp"
                     android:text="नेपाली संख्या"
+                    android:background="@color/orange"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </androidx.cardview.widget.CardView>

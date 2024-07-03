@@ -11,6 +11,7 @@
         android:layout_height="257dp"
         android:layout_gravity="center"
         android:background="@drawable/rectangle"
+        android:layout_marginBottom="16dp"
         android:contentDescription="Quiz Image" />
 
     <Button
@@ -18,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/orange"
         android:text="Select Image" />
 
@@ -26,35 +28,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_box"
-        android:hint="Option 1"/>
+        android:hint="Option 1"
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/option2EditText"
-        android:background="@drawable/background_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Option 2"/>
+        android:background="@drawable/background_box"
+        android:hint="Option 2"
+        android:layout_marginBottom="16dp" />
 
     <EditText
         android:id="@+id/option3EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_box"
-        android:hint="Option 3"/>
+        android:hint="Option 3"
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/option4EditText"
         android:layout_width="match_parent"
         android:background="@drawable/background_box"
         android:layout_height="wrap_content"
-        android:hint="Option 4"/>
+        android:hint="Option 4"
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/correctAnswerEditText"
         android:layout_width="match_parent"
         android:background="@drawable/background_box"
         android:layout_height="wrap_content"
-        android:hint="Correct Answer"/>
+        android:hint="Correct Answer"
+        android:layout_marginBottom="16dp"/>
 
     <Button
         android:id="@+id/uploadButton"

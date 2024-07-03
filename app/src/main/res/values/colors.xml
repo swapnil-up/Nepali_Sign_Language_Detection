@@ -3,8 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#009688</color>
-    <color name="blue">#0d47a1</color>
-    <color name="orange">#ed7c58</color>
+    <color name="blue">#8692f7</color>
+    <color name="orange">#ffdab9 </color>
     <color name="splash">#bdbdbd</color>
     <color name="splashscreen">#f6ece1</color>
     <color name="one">#eeb22c</color>
@@ -20,5 +20,6 @@
     <color name="FrenchLilac">#9068a0</color>
     <color name="PastelBlue">#a9ced1</color>
     <color name="RoseEbony">#614439</color>
+    <color name="RoseEbon">#0d47a1</color>
 
 </resources>

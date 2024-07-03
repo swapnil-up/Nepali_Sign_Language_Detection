@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/splash"
     android:padding="16dp">
 
     <ImageView
@@ -11,6 +12,7 @@
         android:layout_height="246dp"
         android:layout_gravity="center"
         android:background="@drawable/rectangle"
+        android:layout_marginBottom="16dp"
         android:contentDescription="Quiz Image" />
 
     <Button
@@ -18,22 +20,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/orange"
+        android:layout_marginBottom="16dp"
         />
 
     <Button
         android:id="@+id/optionButton2"
         android:backgroundTint="@color/orange"
         android:layout_width="match_parent"
+        android:layout_marginBottom="16dp"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/optionButton3"
         android:backgroundTint="@color/orange"
         android:layout_width="match_parent"
+        android:layout_marginBottom="16dp"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/optionButton4"
+        android:layout_marginBottom="16dp"
         android:layout_width="match_parent"
         android:backgroundTint="@color/orange"
         android:layout_height="wrap_content"/>
