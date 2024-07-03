@@ -78,6 +78,7 @@ dependencies {
 
     implementation ("com.google.firebase:firebase-storage:20.0.0")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
+
     // For loading images
     implementation ("com.google.android.material:material:1.5.0")
     implementation ("com.google.firebase:firebase-database:20.0.5")

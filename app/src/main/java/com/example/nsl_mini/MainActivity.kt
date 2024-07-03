@@ -178,7 +178,7 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
-        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer_vowel.task")
+        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer.task")
 
         val listener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
