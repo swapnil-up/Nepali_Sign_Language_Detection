@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
 
@@ -65,6 +66,7 @@ open class BaseActivity : AppCompatActivity() {
         )
         drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
+        drawerToggle.drawerArrowDrawable.color = ContextCompat.getColor(this, R.color.white)
 
         // Ensure navigation header is updated after setting up the drawer
         updateNavigationHeader()
@@ -88,6 +90,12 @@ open class BaseActivity : AppCompatActivity() {
                 R.id.nav_upload_and_learn -> {
                     Log.d("BaseActivity", "Upload and Learn selected")
                     val intent = Intent(this, PhotoModelActivity::class.java)
+                    startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_play_quiz -> {
+                    Log.d("BaseActivity", "play Quiz selected")
+                    val intent = Intent(this, PlayQuizActivity::class.java)
                     startActivity(intent)
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }

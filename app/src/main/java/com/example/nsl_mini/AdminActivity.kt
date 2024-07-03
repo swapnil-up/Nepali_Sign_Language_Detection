@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nsl_mini.databinding.ActivityAdminBinding
@@ -48,6 +49,7 @@ class AdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         )
         binding.drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
+        drawerToggle.drawerArrowDrawable.color = ContextCompat.getColor(this, R.color.white)
 
         binding.navigationViewAdmin.setNavigationItemSelectedListener(this)
 
@@ -82,10 +84,21 @@ class AdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                 // Handle logout action
                 logout()
             }
+            R.id.nav_addquiz -> {
+                // Navigate to add quiz question activity
+                val intent = Intent(this, AddQuizActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_view_quiz -> {
+                // Navigate to add quiz question activity
+                val intent = Intent(this, ViewQuizzesActivity::class.java)
+                startActivity(intent)
+            }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
+
 
     private fun logout() {
         // Perform logout operation (clear user session, navigate to login activity, etc.)

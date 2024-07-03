@@ -18,6 +18,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:gravity="center"
+            app:titleTextColor="@color/white"
+            android:textAlignment="center"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

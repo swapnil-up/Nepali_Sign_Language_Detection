@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#009688</color>
-    <color name="blue">#59b5df</color>
-    <color name="bluish">#004051</color>
-    <color name="splash">#f6ece1</color>
+    <color name="blue">#0d47a1</color>
+    <color name="bluish">#FF6600</color>
+    <color name="splash">#bdbdbd</color>
 </resources>

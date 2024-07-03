@@ -69,6 +69,12 @@
             android:exported="false" />
         <activity android:name=".UserProfileActivity"
             android:exported="false" />
+        <activity android:name=".AddQuizActivity"
+            android:exported="false" />
+        <activity android:name=".PlayQuizActivity"
+            android:exported="false" />
+        <activity android:name=".ViewQuizzesActivity"
+            android:exported="false" />
     </application>
 
 
