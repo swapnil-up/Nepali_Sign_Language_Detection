@@ -7,20 +7,30 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/black"
+        android:layout_width="376dp"
+        android:layout_height="257dp"
         android:layout_gravity="center"
-        android:contentDescription="Quiz Image"/>
+        android:background="@drawable/rectangle"
+        android:contentDescription="Quiz Image" />
+
+    <Button
+        android:id="@+id/selectImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/orange"
+        android:text="Select Image" />
 
     <EditText
         android:id="@+id/option1EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/background_box"
         android:hint="Option 1"/>
 
     <EditText
         android:id="@+id/option2EditText"
+        android:background="@drawable/background_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Option 2"/>
@@ -29,17 +39,20 @@
         android:id="@+id/option3EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/background_box"
         android:hint="Option 3"/>
 
     <EditText
         android:id="@+id/option4EditText"
         android:layout_width="match_parent"
+        android:background="@drawable/background_box"
         android:layout_height="wrap_content"
         android:hint="Option 4"/>
 
     <EditText
         android:id="@+id/correctAnswerEditText"
         android:layout_width="match_parent"
+        android:background="@drawable/background_box"
         android:layout_height="wrap_content"
         android:hint="Correct Answer"/>
 
@@ -48,12 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upload Question"
-        android:layout_gravity="center"/>
-    <Button
-        android:id="@+id/selectImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Image"
+        android:backgroundTint="@color/orange"
         android:layout_gravity="center"/>
 
 </LinearLayout>

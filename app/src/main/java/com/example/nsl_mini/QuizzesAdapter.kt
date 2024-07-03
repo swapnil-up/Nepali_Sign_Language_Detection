@@ -11,7 +11,8 @@ import com.bumptech.glide.Glide
 
 class QuizzesAdapter(
     private val quizzes: List<Quiz>,
-    private val onEditClick: (Quiz) -> Unit
+    private val onEditClick: (Quiz) -> Unit,
+    private val onDeleteClick: (Quiz) -> Unit
 ) : RecyclerView.Adapter<QuizzesAdapter.QuizViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewHolder {
@@ -21,7 +22,7 @@ class QuizzesAdapter(
 
     override fun onBindViewHolder(holder: QuizViewHolder, position: Int) {
         val quiz = quizzes[position]
-        holder.bind(quiz, onEditClick)
+        holder.bind(quiz, onEditClick, onDeleteClick)
     }
 
     override fun getItemCount(): Int = quizzes.size
@@ -31,12 +32,14 @@ class QuizzesAdapter(
         private val optionsTextView: TextView = itemView.findViewById(R.id.optionsTextView)
         private val correctAnswerTextView: TextView = itemView.findViewById(R.id.correctAnswerTextView)
         private val editButton: Button = itemView.findViewById(R.id.editButton)
+        private val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
 
-        fun bind(quiz: Quiz, onEditClick: (Quiz) -> Unit) {
+        fun bind(quiz: Quiz, onEditClick: (Quiz) -> Unit, onDeleteClick: (Quiz) -> Unit) {
             Glide.with(itemView.context).load(quiz.imageUrl).into(imageView)
             optionsTextView.text = "Options: ${quiz.options.joinToString(", ")}"
             correctAnswerTextView.text = "Correct Answer: ${quiz.correctAnswer}"
             editButton.setOnClickListener { onEditClick(quiz) }
+            deleteButton.setOnClickListener { onDeleteClick(quiz) }
         }
     }
 }

@@ -56,6 +56,7 @@
                     <Button
                         android:id="@+id/prev_vowel_button"
                         android:layout_width="wrap_content"
+                        android:backgroundTint="@color/orange"
                         android:layout_height="wrap_content"
                         android:text="Previous" />
 
@@ -63,6 +64,7 @@
                         android:id="@+id/next_vowel_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@color/orange"
                         android:layout_marginStart="16dp"
                         android:text="Next" />
 

@@ -7,29 +7,34 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/black"
+        android:layout_width="374dp"
+        android:layout_height="246dp"
         android:layout_gravity="center"
-        android:contentDescription="Quiz Image"/>
+        android:background="@drawable/rectangle"
+        android:contentDescription="Quiz Image" />
 
     <Button
         android:id="@+id/optionButton1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/orange"
+        />
 
     <Button
         android:id="@+id/optionButton2"
+        android:backgroundTint="@color/orange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/optionButton3"
+        android:backgroundTint="@color/orange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/optionButton4"
         android:layout_width="match_parent"
+        android:backgroundTint="@color/orange"
         android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -25,14 +25,16 @@ class ViewQuizzesActivity : AppCompatActivity() {
         quizzesRecyclerView = findViewById(R.id.quizzesRecyclerView)
         quizzesRecyclerView.layoutManager = LinearLayoutManager(this)
         quizList = mutableListOf()
-        quizzesAdapter = QuizzesAdapter(quizList) { quiz ->
+        quizzesAdapter = QuizzesAdapter(quizList, { quiz ->
             val intent = Intent(this, AddQuizActivity::class.java)
             intent.putExtra("quizId", quiz.id)
             intent.putExtra("imageUrl", quiz.imageUrl)
             intent.putStringArrayListExtra("options", ArrayList(quiz.options))
             intent.putExtra("correctAnswer", quiz.correctAnswer)
             startActivity(intent)
-        }
+        }, { quiz ->
+            deleteQuiz(quiz)
+        })
         quizzesRecyclerView.adapter = quizzesAdapter
 
         databaseReference = FirebaseDatabase.getInstance().reference.child("quizzes")
@@ -57,5 +59,15 @@ class ViewQuizzesActivity : AppCompatActivity() {
                 Toast.makeText(this@ViewQuizzesActivity, "Failed to load quizzes", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun deleteQuiz(quiz: Quiz) {
+        databaseReference.child(quiz.id!!).removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(this, "Quiz deleted successfully", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Failed to delete quiz", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

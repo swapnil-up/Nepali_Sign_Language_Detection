@@ -4,6 +4,21 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#009688</color>
     <color name="blue">#0d47a1</color>
-    <color name="bluish">#FF6600</color>
+    <color name="orange">#ed7c58</color>
     <color name="splash">#bdbdbd</color>
+    <color name="splashscreen">#f6ece1</color>
+    <color name="one">#eeb22c</color>
+    <color name="two">#2a2a34</color>
+    <color name="three">#bfa581</color>
+    <color name="lavender">#8692f7</color>
+    <color name="grey">#ff424242</color>
+    <color name="teal_200">#80CBC4</color>
+    <color name="teal_700">#00796B</color>
+    <color name="BurntSienna">	#ed7c58</color>
+    <color name="Flax">#eccc84</color>
+    <color name="JapaneseIndigo">#283854</color>
+    <color name="FrenchLilac">#9068a0</color>
+    <color name="PastelBlue">#a9ced1</color>
+    <color name="RoseEbony">#614439</color>
+
 </resources>
