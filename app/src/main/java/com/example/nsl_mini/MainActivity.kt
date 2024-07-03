@@ -75,11 +75,6 @@ class MainActivity : BaseActivity() {
         switchCameraButton = findViewById(R.id.switchCameraButton)
         clearButton = findViewById(R.id.clearButton)
 
-        openDrawerButton = findViewById(R.id.openDrawerButton)
-        openDrawerButton.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
-
         backspaceButton.setOnClickListener {
             synchronized(this) {
                 if (cumulativeResult.isNotEmpty()) {

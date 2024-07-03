@@ -15,6 +15,7 @@ import android.view.TextureView
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
@@ -24,6 +25,7 @@ open class BaseActivity : AppCompatActivity() {
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var drawerToggle: ActionBarDrawerToggle
 
     private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
         if (key == "profile_image_url" || key == "username") {
@@ -49,10 +51,20 @@ open class BaseActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
 
-        val openDrawerButton = findViewById<ImageButton>(R.id.openDrawerButton)
-        openDrawerButton?.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarUser)
+        setSupportActionBar(toolbar)
+
+        // Enable home button as up
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.title = "                Gesture गुरु"
+
+        drawerToggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        drawerLayout.addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
 
         // Ensure navigation header is updated after setting up the drawer
         updateNavigationHeader()
@@ -134,3 +146,4 @@ open class BaseActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
+

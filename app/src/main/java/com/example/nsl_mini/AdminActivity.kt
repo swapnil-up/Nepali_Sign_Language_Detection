@@ -1,20 +1,26 @@
 package com.example.nsl_mini
 
 import UserData
+import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nsl_mini.databinding.ActivityAdminBinding
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
 
-class AdminActivity : AppCompatActivity() {
+class AdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityAdminBinding
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userList: MutableList<UserData>
     private lateinit var userAdapter: UserAdapter
+    private lateinit var drawerToggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +39,20 @@ class AdminActivity : AppCompatActivity() {
         // Fetch user data from Firebase
         fetchUserData()
 
+        // Setup navigation drawer
+        setSupportActionBar(binding.toolbarAdmin)
+        supportActionBar?.title = "                Gesture गुरु"
+        drawerToggle = ActionBarDrawerToggle(
+            this, binding.drawerLayout, binding.toolbarAdmin,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        binding.drawerLayout.addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
+
+        binding.navigationViewAdmin.setNavigationItemSelectedListener(this)
+
         Toast.makeText(this, "Hello Admin", Toast.LENGTH_SHORT).show()
+
     }
 
     private fun fetchUserData() {
@@ -55,5 +74,30 @@ class AdminActivity : AppCompatActivity() {
                 Toast.makeText(this@AdminActivity, "Failed to load user data: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_logout -> {
+                // Handle logout action
+                logout()
+            }
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    private fun logout() {
+        // Perform logout operation (clear user session, navigate to login activity, etc.)
+        val sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+
+        // Navigate to login activity
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }
