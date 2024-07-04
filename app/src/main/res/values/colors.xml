@@ -21,5 +21,7 @@
     <color name="PastelBlue">#a9ced1</color>
     <color name="RoseEbony">#614439</color>
     <color name="RoseEbon">#0d47a1</color>
+    <color name="selected_item_background">#ffdab9</color> <!-- Example color for selected item -->
+    <color name="transparent">#ed7c58</color> <!-- Example color for unselected item -->
 
 </resources>

@@ -77,6 +77,8 @@
             android:exported="false" />
         <activity android:name=".QuizCompletedActivity"
             android:exported="false" />
+        <activity android:name=".AnyQuestionActivity"
+            android:exported="false" />
     </application>
 
 

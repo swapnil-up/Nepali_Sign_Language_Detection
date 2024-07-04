@@ -11,7 +11,10 @@ import android.util.Log
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
+import android.view.MenuItem
 import android.view.TextureView
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -72,7 +75,6 @@ open class BaseActivity : AppCompatActivity() {
 
         // Ensure navigation header is updated after setting up the drawer
         updateNavigationHeader()
-
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {
@@ -101,6 +103,12 @@ open class BaseActivity : AppCompatActivity() {
                     startActivity(intent)
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
+                R.id.any_question -> {
+                    Log.d("BaseActivity", "Any Question selected")
+                    val intent = Intent(this, AnyQuestionActivity::class.java)
+                    startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
 
                 R.id.nav_logout -> {
                     Log.d("BaseActivity", "Logout selected")
@@ -113,6 +121,13 @@ open class BaseActivity : AppCompatActivity() {
         val profileImageView = navView.getHeaderView(0).findViewById<ImageView>(R.id.profileImageView)
         profileImageView.setOnClickListener {
             openUserProfile()
+        }
+        // Set background for each item in the navigation menu programmatically
+        for (i in 0 until navView.menu.size()) {
+            val menuItem = navView.menu.getItem(i)
+            val backgroundDrawable =
+                ContextCompat.getDrawable(this, R.drawable.menu_item_background)
+            setMenuItemBackground(menuItem, backgroundDrawable)
         }
     }
 
@@ -156,5 +171,10 @@ open class BaseActivity : AppCompatActivity() {
         val intent = Intent(this, UserProfileActivity::class.java)
         startActivity(intent)
     }
+    private fun setMenuItemBackground(menuItem: MenuItem, backgroundDrawable: Drawable?) {
+        val view = navView.getHeaderView(0)?.findViewById<View>(menuItem.itemId)
+        view?.background = backgroundDrawable
+    }
+
 }
 
