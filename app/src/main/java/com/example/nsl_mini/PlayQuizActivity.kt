@@ -19,7 +19,7 @@ class PlayQuizActivity : BaseActivity() {
     private lateinit var optionButtons: List<Button>
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userProgressReference: DatabaseReference
-    private lateinit var quizList: List<Quiz>
+    private lateinit var quizList: MutableList<Quiz>
     private var currentQuizIndex = 0
     private var correctAnswers = 0
     private lateinit var sharedPreferences: SharedPreferences
@@ -62,9 +62,10 @@ class PlayQuizActivity : BaseActivity() {
     }
 
     private fun loadQuizzes() {
-        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+        databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                quizList = snapshot.children.mapNotNull { it.getValue(Quiz::class.java) }
+                quizList = snapshot.children.mapNotNull { it.getValue(Quiz::class.java) }.toMutableList()
+                resetUserProgressIfNeeded()
                 showNextQuiz()
             }
 
@@ -72,6 +73,15 @@ class PlayQuizActivity : BaseActivity() {
                 Toast.makeText(this@PlayQuizActivity, "Failed to load quizzes", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun resetUserProgressIfNeeded() {
+        // Reset user progress if currentQuizIndex is out of range
+        if (currentQuizIndex >= quizList.size) {
+            currentQuizIndex = 0
+            correctAnswers = 0
+            updateUserProgress()
+        }
     }
 
     private fun showNextQuiz() {
@@ -98,8 +108,8 @@ class PlayQuizActivity : BaseActivity() {
         if (selectedOption == correctAnswer) {
             Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
             correctAnswers++
-            updateUserProgress()
             currentQuizIndex++
+            updateUserProgress()
             showNextQuiz()
         } else {
             Toast.makeText(this, "Incorrect! The correct answer is $correctAnswer", Toast.LENGTH_SHORT).show()

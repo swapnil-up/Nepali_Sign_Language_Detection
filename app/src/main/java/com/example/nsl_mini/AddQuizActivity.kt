@@ -5,12 +5,14 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputFilter
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -73,6 +75,45 @@ class AddQuizActivity : BaseActivityAdmin() {
             option4EditText.setText(options?.get(3))
             correctAnswerEditText.setText(correctAnswer)
         }
+
+        setEditTextFilters()
+        setEditTextListeners()
+    }
+
+    private fun setEditTextFilters() {
+        val lengthFilter = InputFilter.LengthFilter(20)
+        option1EditText.filters = arrayOf(lengthFilter)
+        option2EditText.filters = arrayOf(lengthFilter)
+        option3EditText.filters = arrayOf(lengthFilter)
+        option4EditText.filters = arrayOf(lengthFilter)
+        correctAnswerEditText.filters = arrayOf(lengthFilter)
+    }
+
+    private fun setEditTextListeners() {
+        option1EditText.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+                option2EditText.requestFocus()
+                true
+            } else {
+                false
+            }
+        }
+        option2EditText.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+                option3EditText.requestFocus()
+                true
+            } else {
+                false
+            }
+        }
+        option3EditText.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+                option4EditText.requestFocus()
+                true
+            } else {
+                false
+            }
+        }
     }
 
     private fun selectImageFromGallery() {
@@ -110,6 +151,16 @@ class AddQuizActivity : BaseActivityAdmin() {
             option4EditText.text.toString()
         )
         val correctAnswer = correctAnswerEditText.text.toString()
+
+        if (options.distinct().size != options.size) {
+            Toast.makeText(this, "Options must be unique", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!options.contains(correctAnswer)) {
+            Toast.makeText(this, "Correct answer must match one of the options", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         if (options.all { it.isNotEmpty() } && correctAnswer.isNotEmpty()) {
             if (imageUri != null) {
@@ -165,6 +216,7 @@ class AddQuizActivity : BaseActivityAdmin() {
                 }
         }
     }
+
     override fun onBackPressed() {
         // Navigate to MainActivity explicitly
         val intent = Intent(this, AdminActivity::class.java)

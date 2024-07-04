@@ -42,7 +42,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:background="@drawable/background_box"
-            android:hint="Option 1" />
+            android:hint="Option 1"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:imeOptions="actionNext" />
 
         <EditText
             android:id="@+id/option2EditText"
@@ -50,7 +53,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_box"
-            android:hint="Option 2" />
+            android:hint="Option 2"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:imeOptions="actionNext" />
 
         <EditText
             android:id="@+id/option3EditText"
@@ -58,7 +64,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:background="@drawable/background_box"
-            android:hint="Option 3" />
+            android:hint="Option 3"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:imeOptions="actionNext" />
 
         <EditText
             android:id="@+id/option4EditText"
@@ -66,7 +75,10 @@
             android:layout_marginBottom="12dp"
             android:background="@drawable/background_box"
             android:layout_height="wrap_content"
-            android:hint="Option 4" />
+            android:hint="Option 4"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:imeOptions="actionNext" />
 
         <EditText
             android:id="@+id/correctAnswerEditText"
@@ -74,7 +86,10 @@
             android:background="@drawable/background_box"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:hint="Correct Answer" />
+            android:hint="Correct Answer"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:imeOptions="actionDone" />
 
         <Button
             android:id="@+id/uploadButton"

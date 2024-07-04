@@ -70,10 +70,32 @@ class ViewQuizzesActivity : BaseActivityAdmin() {
         databaseReference.child(quiz.id!!).removeValue().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(this, "Quiz deleted successfully", Toast.LENGTH_SHORT).show()
+                updateUserProgressAfterDeletion(quiz.id!!)
             } else {
                 Toast.makeText(this, "Failed to delete quiz", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun updateUserProgressAfterDeletion(deletedQuizId: String) {
+        val userProgressReference = FirebaseDatabase.getInstance().reference.child("userProgress")
+
+        userProgressReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (userSnapshot in snapshot.children) {
+                    val userId = userSnapshot.key ?: continue
+                    val currentQuizIndex = userSnapshot.child("currentQuizIndex").getValue(Int::class.java) ?: continue
+
+                    if (currentQuizIndex >= quizList.size) {
+                        userProgressReference.child(userId).child("currentQuizIndex").setValue(quizList.size - 1)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@ViewQuizzesActivity, "Failed to update user progress", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onBackPressed() {
