@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class ViewQuizzesActivity : AppCompatActivity() {
+class ViewQuizzesActivity : BaseActivityAdmin() {
     private lateinit var quizzesRecyclerView: RecyclerView
     private lateinit var databaseReference: DatabaseReference
     private lateinit var quizzesAdapter: QuizzesAdapter
@@ -21,6 +21,7 @@ class ViewQuizzesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_quizzes)
+        setupDrawerAdmin()
 
         quizzesRecyclerView = findViewById(R.id.quizzesRecyclerView)
         quizzesRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -56,7 +57,11 @@ class ViewQuizzesActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@ViewQuizzesActivity, "Failed to load quizzes", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@ViewQuizzesActivity,
+                    "Failed to load quizzes",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
@@ -69,5 +74,15 @@ class ViewQuizzesActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to delete quiz", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onBackPressed() {
+        // Navigate to MainActivity explicitly
+        val intent = Intent(this, AdminActivity::class.java)
+        startActivity(intent)
+        finish()
+
+        // Call super to handle default back button behavior
+        super.onBackPressed()
     }
 }

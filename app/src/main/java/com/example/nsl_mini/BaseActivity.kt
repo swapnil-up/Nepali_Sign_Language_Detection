@@ -66,7 +66,9 @@ open class BaseActivity : AppCompatActivity() {
         )
         drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
+
         drawerToggle.drawerArrowDrawable.color = ContextCompat.getColor(this, R.color.white)
+
 
         // Ensure navigation header is updated after setting up the drawer
         updateNavigationHeader()

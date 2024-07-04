@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbarUser"
+    android:gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:id="@+id/toolbar"
-    android:background="@color/blue"
-    android:gravity="center_vertical">
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary"
+    app:titleTextColor="@color/white"
+    android:textAlignment="center"
+    app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Gesture गुरु"
-        android:textAlignment="center"
-        android:textSize="20dp"
-        android:layout_margin="5dp"
-        android:textColor="@color/black"/>
-</LinearLayout>

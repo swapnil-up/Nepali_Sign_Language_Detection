@@ -19,7 +19,7 @@ import com.google.firebase.storage.StorageReference
 import java.io.IOException
 import java.util.*
 
-class AddQuizActivity : AppCompatActivity() {
+class AddQuizActivity : BaseActivityAdmin() {
 
     private lateinit var imageView: ImageView
     private lateinit var option1EditText: EditText
@@ -38,6 +38,7 @@ class AddQuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_quiz)
+        setupDrawerAdmin()
 
         imageView = findViewById(R.id.imageView)
         option1EditText = findViewById(R.id.option1EditText)
@@ -163,5 +164,14 @@ class AddQuizActivity : AppCompatActivity() {
                     Toast.makeText(this, "Failed to add quiz question", Toast.LENGTH_SHORT).show()
                 }
         }
+    }
+    override fun onBackPressed() {
+        // Navigate to MainActivity explicitly
+        val intent = Intent(this, AdminActivity::class.java)
+        startActivity(intent)
+        finish()
+
+        // Call super to handle default back button behavior
+        super.onBackPressed()
     }
 }

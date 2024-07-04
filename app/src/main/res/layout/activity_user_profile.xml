@@ -22,7 +22,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <!-- Main Content -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -47,18 +46,18 @@
                     android:layout_width="350dp"
                     android:layout_height="45dp"
                     android:layout_marginStart="28dp"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="40dp"
                     android:background="@drawable/user_item_background"
                     android:text="Username"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
+                    app:layout_constraintTop_toBottomOf="@+id/uploadPhotoButton" />
 
                 <TextView
                     android:id="@+id/phoneNumberTextView"
                     android:layout_width="350dp"
                     android:layout_height="45dp"
                     android:layout_marginStart="28dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="25dp"
                     android:background="@drawable/user_item_background"
                     android:text="Phone Number"
                     app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +68,7 @@
                     android:layout_width="350dp"
                     android:layout_height="45dp"
                     android:layout_marginStart="28dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="25dp"
                     android:background="@drawable/user_item_background"
                     android:text="Role"
                     app:layout_constraintStart_toStartOf="parent"
@@ -79,13 +78,46 @@
                     android:id="@+id/uploadPhotoButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Upload Photo"
+                    android:layout_marginTop="15dp"
                     android:backgroundTint="@color/orange"
+                    android:text="Upload Photo"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/roleTextView" />
+                    app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:text="Username"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/usernameTextView"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:text="PhoneNumber"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/phoneNumberTextView"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:text="Role"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/roleTextView"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

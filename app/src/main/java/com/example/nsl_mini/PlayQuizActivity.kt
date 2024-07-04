@@ -14,7 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import android.content.SharedPreferences
 
-class PlayQuizActivity : AppCompatActivity() {
+class PlayQuizActivity : BaseActivity() {
     private lateinit var imageView: ImageView
     private lateinit var optionButtons: List<Button>
     private lateinit var databaseReference: DatabaseReference
@@ -28,7 +28,7 @@ class PlayQuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_quiz)
-
+        setupDrawer()
         sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
         userId = getUserId()
 
@@ -116,5 +116,15 @@ class PlayQuizActivity : AppCompatActivity() {
 
     private fun getUserId(): String {
         return sharedPreferences.getString("user_id", "") ?: ""
+    }
+
+    override fun onBackPressed() {
+        // Navigate to MainActivity explicitly
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+
+        // Call super to handle default back button behavior
+        super.onBackPressed()
     }
 }

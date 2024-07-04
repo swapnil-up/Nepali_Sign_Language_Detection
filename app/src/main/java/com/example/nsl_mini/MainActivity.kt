@@ -220,4 +220,11 @@ class MainActivity : BaseActivity() {
             databaseReference.child(userId).removeEventListener(userEventListener)
         }
     }
+    override fun onBackPressed() {
+        // Call super.onBackPressed to ensure default back button behavior
+        super.onBackPressed()
+
+        // Finish the activity and exit the app
+        finishAffinity()
+    }
 }

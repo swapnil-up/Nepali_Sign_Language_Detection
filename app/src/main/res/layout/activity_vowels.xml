@@ -18,7 +18,7 @@
             <!-- Toolbar -->
             <include
                 layout="@layout/toolbar"
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbarUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
