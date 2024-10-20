@@ -1,0 +1,1 @@
+This is a project for a Nepali Sign language gesture recognition application that uses the mediapipe framework to detects different gestures and find out what is shown. In addition it also allows you to play a quiz based on questions that you can add as the admin. There are other features available as well. 
