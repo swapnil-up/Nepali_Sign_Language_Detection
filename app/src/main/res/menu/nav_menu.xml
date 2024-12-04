@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/baseline_add_home_24"
+        android:background="@drawable/menu_item_background"
+        android:title="@string/nav_home" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:background="@drawable/menu_item_background"
+
+        android:title="@string/nav_logout" />
+    <item
+        android:id="@+id/nav_learn"
+        android:icon="@drawable/baseline_book_24"
+        android:background="@drawable/menu_item_background"
+
+        android:title="Learn" />
+    <item
+        android:id="@+id/nav_upload_and_learn"
+        android:icon="@android:drawable/stat_sys_upload_done"
+        android:background="@drawable/menu_item_background"
+
+        android:title="Upload and Learn" />
+    <item
+        android:id="@+id/nav_play_quiz"
+        android:icon="@android:drawable/ic_media_play"
+        android:background="@drawable/menu_item_background"
+        android:title="Play Quiz" />
+    <item
+        android:id="@+id/any_question"
+        android:icon="@android:drawable/ic_menu_help"
+        android:background="@drawable/menu_item_background"
+        android:title="?" />
+</menu>

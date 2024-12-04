@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">NSL_mini</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_logout">Logout</string>
+    <string name="already_registered_login">Already registered? login</string>
+    <string name="login">LOGIN</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="not_yet_registered_sign_up">Not yet registered? Sign up</string>
+    <string name="signup">SIGNUP</string>
+    <string name="passwordlogin">Password</string>
+    <string name="usernamelogin">Username</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="google_app_id">1:25469869772:android:c08ad405b2da2f99196c69</string>
+    <string name="profile_image" />
+    <string name="open_drawer" />
+    <string name="congratulations_you_have_completed_all_quizzes">Congratulations! You have completed all quizzes.</string>
 </resources>
