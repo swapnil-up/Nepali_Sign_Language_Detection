@@ -85,7 +85,17 @@ class MainActivity : BaseActivity() {
                 if (cumulativeResult.isNotEmpty()) {
                     if (cumulativeResult.endsWith("अं")) {
                         cumulativeResult.delete(cumulativeResult.length - 2, cumulativeResult.length)
-                    } else if (cumulativeResult.endsWith("अः") || cumulativeResult.endsWith("अ:")) {
+                    }
+                    else if (cumulativeResult.endsWith("क्ष")) {
+                        cumulativeResult.delete(cumulativeResult.length - 3, cumulativeResult.length)
+                    }
+                    else if (cumulativeResult.endsWith("त्र")) {
+                        cumulativeResult.delete(cumulativeResult.length - 3, cumulativeResult.length)
+                    }
+                    else if (cumulativeResult.endsWith("ज्ञ")) {
+                        cumulativeResult.delete(cumulativeResult.length - 3, cumulativeResult.length)
+                    }
+                    else if (cumulativeResult.endsWith("अः") || cumulativeResult.endsWith("अ:")) {
                         cumulativeResult.delete(cumulativeResult.length - 2, cumulativeResult.length)
                     } else {
                         cumulativeResult.deleteCharAt(cumulativeResult.length - 1)
@@ -178,7 +188,7 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
-        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer.task")
+        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer1.task")
 
         val listener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {

@@ -39,7 +39,7 @@ class PhotoModelActivity : BaseActivity() {
             // Display the result in resultTextView
             resultTextView.text = result
         }
-        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer.task")
+        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer1.task")
 
         selectImageButton.setOnClickListener {
             openGallery()
