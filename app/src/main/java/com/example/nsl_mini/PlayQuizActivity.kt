@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.bumptech.glide.Glide
 
 class PlayQuizActivity : BaseActivity() {
@@ -29,6 +30,14 @@ class PlayQuizActivity : BaseActivity() {
             findViewById(R.id.optionButton3),
             findViewById(R.id.optionButton4)
         )
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@PlayQuizActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        })
 
         loadQuizzes()
     }
@@ -89,9 +98,4 @@ class PlayQuizActivity : BaseActivity() {
         }, 1000)
     }
 
-    override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
 }

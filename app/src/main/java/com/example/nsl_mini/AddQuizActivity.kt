@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import java.io.IOException
@@ -70,6 +71,14 @@ class AddQuizActivity : BaseActivity() {
 
         setEditTextFilters()
         setEditTextListeners()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@AddQuizActivity, ViewQuizzesActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        })
     }
 
     private fun setEditTextFilters() {
@@ -183,9 +192,4 @@ class AddQuizActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        val intent = Intent(this, ViewQuizzesActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
 }

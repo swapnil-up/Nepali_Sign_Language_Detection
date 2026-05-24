@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.view.TextureView
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.app.AlertDialog
 import android.widget.LinearLayout
@@ -17,6 +18,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.graphics.SurfaceTexture
 import android.widget.HorizontalScrollView
+import android.widget.SeekBar
+import androidx.activity.OnBackPressedCallback
 import java.util.Locale
 
 class MainActivity : BaseActivity() {
@@ -26,16 +29,18 @@ class MainActivity : BaseActivity() {
     private lateinit var landmarkOverlayView: LandmarkOverlayView
     private lateinit var resultTextView: TextView
     private lateinit var lastResultTextView: TextView
-    private lateinit var backspaceButton: Button
-    private lateinit var switchCameraButton: Button
-    private lateinit var clearButton: Button
+    private lateinit var backspaceButton: ImageButton
+    private lateinit var switchCameraButton: ImageButton
+    private lateinit var clearButton: ImageButton
     private lateinit var horizontalScrollView: HorizontalScrollView
     private lateinit var targetCharacterText: TextView
     private lateinit var practiceFeedbackText: TextView
     private lateinit var practiceProgressText: TextView
     private lateinit var practiceHintText: TextView
     private lateinit var practiceModeButton: Button
-    private lateinit var speakButton: Button
+    private lateinit var speakButton: ImageButton
+    private lateinit var confidenceText: TextView
+    private lateinit var settingsButton: ImageButton
     private var tts: TextToSpeech? = null
 
     private var cumulativeResult = StringBuilder()
@@ -70,6 +75,9 @@ class MainActivity : BaseActivity() {
         practiceHintText = findViewById(R.id.practiceHintText)
         practiceModeButton = findViewById(R.id.practiceModeButton)
         speakButton = findViewById(R.id.speakButton)
+        confidenceText = findViewById(R.id.confidenceText)
+        settingsButton = findViewById(R.id.settingsButton)
+
 
         backspaceButton.setOnClickListener {
             if (isPracticeMode) {
@@ -138,6 +146,10 @@ class MainActivity : BaseActivity() {
             }
         }
 
+        settingsButton.setOnClickListener {
+            showSettingsDialog()
+        }
+
         switchCameraButton.setOnClickListener {
             if (!isSwitchingCamera) {
                 isSwitchingCamera = true
@@ -152,6 +164,12 @@ class MainActivity : BaseActivity() {
             }
         }
 
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finishAffinity()
+            }
+        })
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         } else {
@@ -164,6 +182,19 @@ class MainActivity : BaseActivity() {
             runOnUiThread {
                 resultTextView.text = result
                 landmarkOverlayView.setLandmarks(landmarks)
+
+                val conf = gestureRecognizerHelper.lastConfidence
+                val isRecognized = result.isNotEmpty()
+                confidenceText.text = if (conf > 0f) "Conf: ${(conf * 100).toInt()}%" else "Conf: --"
+                confidenceText.setTextColor(
+                    when {
+                        conf == 0f -> ContextCompat.getColor(this, R.color.white)
+                        !isRecognized -> ContextCompat.getColor(this, R.color.error)
+                        conf >= 0.80f -> ContextCompat.getColor(this, R.color.success)
+                        else -> ContextCompat.getColor(this, R.color.accent)
+                    }
+                )
+
                 val currentLetter = GestureResultFormatter.firstGesture(result)
 
                 if (isPracticeMode) {
@@ -177,6 +208,12 @@ class MainActivity : BaseActivity() {
             }
         }
         gestureRecognizerHelper.setup(GestureResultFormatter.GESTURE_MODEL_FILE)
+
+        if (!gestureRecognizerHelper.isModelLoaded) {
+            resultTextView.text = gestureRecognizerHelper.modelError ?: "Failed to load model"
+            resultTextView.setTextColor(ContextCompat.getColor(this, R.color.error))
+            return
+        }
 
         val listener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
@@ -205,8 +242,10 @@ class MainActivity : BaseActivity() {
         practiceCharsShuffled = GestureResultFormatter.practiceCharacters.shuffled().toMutableList()
 
         practiceModeButton.text = "Exit"
-        backspaceButton.text = "Skip"
-        clearButton.text = "Stop"
+        backspaceButton.setImageResource(R.drawable.ic_skip)
+        backspaceButton.contentDescription = "Skip"
+        clearButton.setImageResource(R.drawable.ic_stop)
+        clearButton.contentDescription = "Stop"
 
         targetCharacterText.visibility = View.VISIBLE
         practiceFeedbackText.visibility = View.VISIBLE
@@ -222,8 +261,10 @@ class MainActivity : BaseActivity() {
         isAdvancing = false
 
         practiceModeButton.text = "Practice"
-        backspaceButton.text = "Del"
-        clearButton.text = "Clr"
+        backspaceButton.setImageResource(R.drawable.ic_backspace)
+        backspaceButton.contentDescription = "Delete"
+        clearButton.setImageResource(R.drawable.ic_clear)
+        clearButton.contentDescription = "Clear"
         targetCharacterText.visibility = View.GONE
         practiceFeedbackText.visibility = View.GONE
         practiceProgressText.visibility = View.GONE
@@ -249,11 +290,25 @@ class MainActivity : BaseActivity() {
             return
         }
         val target = practiceCharsShuffled[practiceIndex]
-        targetCharacterText.text = target
         val label = GestureResultFormatter.characterLabels[target]
         practiceFeedbackText.text = if (label != null) "$target — $label" else target
         practiceFeedbackText.setTextColor(ContextCompat.getColor(this, R.color.white))
         practiceProgressText.text = "${practiceIndex + 1} / ${practiceCharsShuffled.size}  •  $practiceCorrectCount correct"
+
+        targetCharacterText.animate()
+            .scaleX(0.3f).scaleY(0.3f)
+            .alpha(0f)
+            .setDuration(120)
+            .withEndAction {
+                targetCharacterText.text = target
+                targetCharacterText.animate()
+                    .scaleX(1f).scaleY(1f)
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start()
+            }
+            .start()
+
         lastDetectedLetter = null
     }
 
@@ -278,6 +333,16 @@ class MainActivity : BaseActivity() {
             practiceFeedbackText.text = "Correct! \u2714"
             practiceFeedbackText.setTextColor(ContextCompat.getColor(this, R.color.green))
             targetCharacterText.setTextColor(ContextCompat.getColor(this, R.color.green))
+            targetCharacterText.animate()
+                .scaleX(1.25f).scaleY(1.25f)
+                .setDuration(150)
+                .withEndAction {
+                    targetCharacterText.animate()
+                        .scaleX(1f).scaleY(1f)
+                        .setDuration(100)
+                        .start()
+                }
+                .start()
             lastDetectedLetter = currentLetter
             practiceProgressText.text = "${practiceIndex + 1} / ${practiceCharsShuffled.size}  •  $practiceCorrectCount correct"
 
@@ -317,6 +382,42 @@ class MainActivity : BaseActivity() {
             .show()
     }
 
+    private fun showSettingsDialog() {
+        val currentPct = (gestureRecognizerHelper.confidenceThreshold * 100).toInt()
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(48, 24, 48, 24)
+        }
+        val valueLabel = TextView(this).apply {
+            text = "$currentPct%"
+            textSize = 24f
+            gravity = android.view.Gravity.CENTER
+            setTypeface(null, android.graphics.Typeface.BOLD)
+        }
+        val seekBar = SeekBar(this).apply {
+            max = 45
+            progress = currentPct - 50
+            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
+                    valueLabel.text = "${progress + 50}%"
+                }
+                override fun onStartTrackingTouch(sb: SeekBar?) {}
+                override fun onStopTrackingTouch(sb: SeekBar?) {
+                    val pct = (sb?.progress ?: 15) + 50
+                    gestureRecognizerHelper.confidenceThreshold = pct / 100f
+                }
+            })
+        }
+        layout.addView(valueLabel)
+        layout.addView(seekBar)
+        AlertDialog.Builder(this)
+            .setTitle("Confidence Threshold")
+            .setMessage("Adjust minimum confidence (50% – 95%)")
+            .setView(layout)
+            .setPositiveButton("Done", null)
+            .show()
+    }
+
     private fun scrollToEnd() {
         horizontalScrollView.post {
             horizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
@@ -340,8 +441,4 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
-    }
 }

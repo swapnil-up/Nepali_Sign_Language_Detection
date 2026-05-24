@@ -12,6 +12,8 @@ import android.provider.MediaStore
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -19,11 +21,18 @@ import java.io.InputStream
 
 class PhotoModelActivity : BaseActivity() {
 
-    private val PICK_IMAGE_REQUEST = 1
     private lateinit var selectImageButton: Button
     private lateinit var selectedImageView: ImageView
     private lateinit var resultTextView: TextView
     private lateinit var gestureRecognizerHelper: GestureRecognizerHelper
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                processSelectedImage(uri)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,29 +47,28 @@ class PhotoModelActivity : BaseActivity() {
         }
         gestureRecognizerHelper.setup(GestureResultFormatter.GESTURE_MODEL_FILE)
 
+        if (!gestureRecognizerHelper.isModelLoaded) {
+            resultTextView.text = gestureRecognizerHelper.modelError ?: "Failed to load model"
+            resultTextView.setTextColor(android.graphics.Color.RED)
+        }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@PhotoModelActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        })
+
         selectImageButton.setOnClickListener {
-            openGallery()
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickImageLauncher.launch(intent)
         }
 
         // Check and request permission if not granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 0)
-        }
-    }
-
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, PICK_IMAGE_REQUEST)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            val imageUri: Uri? = data.data
-            imageUri?.let {
-                processSelectedImage(it)
-            }
         }
     }
 
@@ -108,14 +116,4 @@ class PhotoModelActivity : BaseActivity() {
             // Permission denied, handle accordingly
         }
     }
-    override fun onBackPressed() {
-        // Navigate to MainActivity explicitly
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-
-        // Call super to handle default back button behavior
-        super.onBackPressed()
-    }
-
 }

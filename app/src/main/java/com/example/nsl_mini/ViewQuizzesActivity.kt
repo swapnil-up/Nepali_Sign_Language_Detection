@@ -3,6 +3,7 @@ package com.example.nsl_mini
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -33,6 +34,14 @@ class ViewQuizzesActivity : BaseActivity() {
         })
         quizzesRecyclerView.adapter = quizzesAdapter
 
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@ViewQuizzesActivity, AddQuizActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        })
+
         loadQuizzes()
     }
 
@@ -58,9 +67,4 @@ class ViewQuizzesActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        val intent = Intent(this, AddQuizActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
 }

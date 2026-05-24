@@ -15,35 +15,79 @@ class GestureRecognizerHelper(
     private val resultListener: (String, List<HandLandmark>?) -> Unit) : GestureRecognizer {
 
     private var gestureRecognizer: MpGestureRecognizer? = null
-    private val confidenceThreshold = 0.65
+    private var modelAssetPath: String = ""
+
+    var confidenceThreshold: Float = 0.65f
+        set(value) {
+            field = value
+            recreateRecognizer()
+        }
+
+    var lastConfidence: Float = 0f
+        private set
+
+    var isModelLoaded: Boolean = false
+        private set
+
+    var modelError: String? = null
+        private set
 
     override fun setup(modelAssetPath: String) {
-        val baseOptions = BaseOptions.builder()
-            .setModelAssetPath(modelAssetPath)
-            .build()
+        this.modelAssetPath = modelAssetPath
+        createRecognizer()
+    }
 
-        val options = MpGestureRecognizer.GestureRecognizerOptions.builder()
-            .setBaseOptions(baseOptions)
-            .setRunningMode(RunningMode.LIVE_STREAM)
-            .setResultListener(this::returnLivestreamResult)
-            .setErrorListener(this::returnLivestreamError)
-            .setMinHandDetectionConfidence(confidenceThreshold.toFloat())
-            .setMinHandPresenceConfidence(confidenceThreshold.toFloat())
-            .setMinTrackingConfidence(confidenceThreshold.toFloat())
-            .build()
+    private fun createRecognizer() {
+        gestureRecognizer?.close()
+        isModelLoaded = false
+        modelError = null
+        if (modelAssetPath.isEmpty()) {
+            modelError = "Model path is empty"
+            return
+        }
 
-        gestureRecognizer = MpGestureRecognizer.createFromOptions(context, options)
+        try {
+            val baseOptions = BaseOptions.builder()
+                .setModelAssetPath(modelAssetPath)
+                .build()
+
+            val options = MpGestureRecognizer.GestureRecognizerOptions.builder()
+                .setBaseOptions(baseOptions)
+                .setRunningMode(RunningMode.LIVE_STREAM)
+                .setResultListener(this::returnLivestreamResult)
+                .setErrorListener(this::returnLivestreamError)
+                .setMinHandDetectionConfidence(confidenceThreshold.toFloat())
+                .setMinHandPresenceConfidence(confidenceThreshold.toFloat())
+                .setMinTrackingConfidence(confidenceThreshold.toFloat())
+                .build()
+
+            gestureRecognizer = MpGestureRecognizer.createFromOptions(context, options)
+            isModelLoaded = true
+        } catch (e: Exception) {
+            modelError = "Failed to load model: ${e.localizedMessage}"
+            Log.e("GestureRecognizerHelper", modelError!!, e)
+        }
+    }
+
+    private fun recreateRecognizer() {
+        if (gestureRecognizer != null) {
+            createRecognizer()
+        }
     }
 
     private fun returnLivestreamResult(result: GestureRecognizerResult, image: MPImage) {
         val stringBuilder = StringBuilder()
+        lastConfidence = 0f
 
         result.gestures().forEach { gestureList ->
-            gestureList
-                .filter { it.score() >= confidenceThreshold }
-                .forEach { gesture ->
+            gestureList.forEach { gesture ->
+                if (gesture.score() > lastConfidence) {
+                    lastConfidence = gesture.score()
+                }
+                if (gesture.score() >= confidenceThreshold) {
                     stringBuilder.append("${gesture.categoryName()}\n")
                 }
+            }
         }
         val handLandmarks = result.landmarks().flatten().map {
             HandLandmark(x = it.x(), y = it.y(), z = it.z())

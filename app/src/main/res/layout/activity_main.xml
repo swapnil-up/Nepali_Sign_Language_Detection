@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/resultTextView"
+            app:layout_constraintBottom_toTopOf="@+id/resultBar"
             app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView">
 
             <TextureView
@@ -123,19 +123,54 @@
                 android:shadowDx="1"
                 android:shadowDy="1"
                 android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/confidenceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="12dp"
+                android:textSize="13sp"
+                android:textColor="@color/white"
+                android:shadowColor="@color/black"
+                android:shadowRadius="4"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:text="Conf: --" />
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/resultTextView"
+        <LinearLayout
+            android:id="@+id/resultBar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:background="@color/textPrimary"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/controlsBar"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/resultTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_manage"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Settings"
+                android:scaleType="center"
+                android:padding="12dp"
+                android:tint="@color/white" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/controlsBar"
@@ -158,49 +193,53 @@
                 android:textSize="12sp"
                 android:textAllCaps="false" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/switchCameraButton"
                 style="@style/IconButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginHorizontal="1dp"
-                android:text="Cam"
-                android:textSize="10sp"
-                android:textAllCaps="false" />
+                android:src="@drawable/ic_camera"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Switch camera"
+                android:scaleType="centerInside" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/backspaceButton"
                 style="@style/IconButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginHorizontal="1dp"
-                android:text="Del"
-                android:textSize="10sp"
-                android:textAllCaps="false" />
+                android:src="@drawable/ic_backspace"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Delete"
+                android:scaleType="centerInside" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/clearButton"
                 style="@style/IconButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginHorizontal="1dp"
-                android:text="Clr"
-                android:textSize="10sp"
-                android:textAllCaps="false" />
+                android:src="@drawable/ic_clear"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Clear"
+                android:scaleType="centerInside" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/speakButton"
                 style="@style/IconButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginHorizontal="1dp"
-                android:text="TTS"
-                android:textSize="10sp"
-                android:textAllCaps="false" />
+                android:src="@drawable/ic_speaker"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Read aloud"
+                android:scaleType="centerInside" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

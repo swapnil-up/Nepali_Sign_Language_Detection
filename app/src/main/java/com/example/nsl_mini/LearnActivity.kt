@@ -2,6 +2,7 @@ package com.example.nsl_mini
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 
@@ -31,6 +32,14 @@ class LearnActivity : BaseActivity() {
                 )
             )
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@LearnActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        })
 
         cardConsonants.setOnClickListener {
             startPager(
@@ -73,9 +82,4 @@ class LearnActivity : BaseActivity() {
         startActivity(intent)
     }
 
-    override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
 }
