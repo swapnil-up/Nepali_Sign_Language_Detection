@@ -1,23 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.NSL_mini" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/blue</item>
-        <item name="android:statusBarColor">@color/blue</item>
-        <item name="buttonStyle">@style/OrangeButton</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/tonalBg</item>
+        <item name="colorOnPrimaryContainer">@color/tonalText</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/accentLight</item>
+        <item name="android:statusBarColor">@color/primaryDark</item>
+        <item name="android:navigationBarColor">@color/primaryDark</item>
     </style>
 
     <style name="Theme.NSL_mini" parent="Base.Theme.NSL_mini" />
 
-    <!-- Splash screen theme -->
     <style name="SplashTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="OrangeButton" parent="Widget.AppCompat.Button">
-        <item name="android:backgroundTint">@color/orange</item>
+    <style name="TonalButton" parent="Widget.Material3.Button.TonalButton">
+        <item name="backgroundTint">@color/tonalBg</item>
+        <item name="android:textColor">@color/tonalText</item>
     </style>
 </resources>

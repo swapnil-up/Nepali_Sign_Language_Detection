@@ -3,11 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbarUser"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
+    android:background="@color/toolbarBg"
     app:titleTextColor="@color/white"
-    android:textAlignment="center"
-    app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
+    android:elevation="4dp"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>

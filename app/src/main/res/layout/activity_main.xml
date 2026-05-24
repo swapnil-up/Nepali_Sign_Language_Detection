@@ -10,19 +10,24 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
+
+        <include
+            android:id="@+id/toolbarUser"
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:padding="16dp"
+            android:padding="12dp"
             android:scrollbars="none"
-            android:background="@color/splash"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="@color/textPrimary"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarUser">
 
             <TextView
                 android:id="@+id/lastResultTextView"
@@ -33,90 +38,84 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:text="Last Detected Result:"
-                android:textSize="18sp" />
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </HorizontalScrollView>
 
-        <include
-            android:id="@+id/toolbarUser"
-            layout="@layout/toolbar"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/resultTextView"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView">
 
-        <TextureView
-            android:id="@+id/textureView"
-            android:layout_width="415dp"
-            android:layout_height="560dp"
-            android:layout_above="@id/resultTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+            <TextureView
+                android:id="@+id/textureView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
 
-        <com.example.nsl_mini.LandmarkOverlayView
-            android:id="@+id/landmarkOverlayView"
-            android:layout_width="match_parent"
-            android:layout_height="562dp"
-            android:layout_above="@id/resultTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+            <com.example.nsl_mini.LandmarkOverlayView
+                android:id="@+id/landmarkOverlayView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/resultTextView"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/black"
-            android:padding="16dp"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="48dp"
+            android:background="@color/textPrimary"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/controlsBar"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/backspaceButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textureView"
-            android:layout_alignParentStart="true"
-            android:layout_margin="16dp"
-            android:text="Backspace"
-            android:backgroundTint="@color/orange"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.565"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.934" />
+        <LinearLayout
+            android:id="@+id/controlsBar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@color/textPrimary"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
-            android:id="@+id/switchCameraButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="4dp"
-            android:text="Switch Camera"
-            android:backgroundTint="@color/orange"
-            app:layout_constraintBottom_toTopOf="@+id/resultTextView"
-            app:layout_constraintEnd_toStartOf="@+id/backspaceButton"
-            app:layout_constraintHorizontal_bias="0.172"
-            app:layout_constraintStart_toStartOf="parent" />
+            <Button
+                android:id="@+id/switchCameraButton"
+                style="@style/TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="4dp"
+                android:text="Flip"
+                android:textSize="13sp"
+                android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/backspaceButton"
-            android:layout_alignBottom="@+id/textureView"
-            android:layout_alignParentStart="true"
-            android:layout_margin="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="4dp"
-            android:backgroundTint="@color/orange"
-            android:text="Clear"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/backspaceButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.937" />
+            <Button
+                android:id="@+id/backspaceButton"
+                style="@style/TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="4dp"
+                android:text="Backspace"
+                android:textSize="13sp"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/clearButton"
+                style="@style/TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="4dp"
+                android:text="Clear"
+                android:textSize="13sp"
+                android:textAllCaps="false" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -125,6 +124,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        android:background="@color/splash"
+        android:background="@color/surface"
         app:menu="@menu/nav_menu"/>
 </androidx.drawerlayout.widget.DrawerLayout>

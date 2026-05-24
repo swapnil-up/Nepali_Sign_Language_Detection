@@ -3,35 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
-    <!-- Content View -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!-- Toolbar -->
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <include
             layout="@layout/toolbar"
             android:id="@+id/toolbarUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <ImageView
-            android:id="@+id/questionImageView"
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/any" />
+            android:padding="16dp">
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/questionImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/any" />
+        </FrameLayout>
+    </LinearLayout>
 
-    <!-- Navigation View -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        android:background="@color/splash"
+        android:background="@color/surface"
         app:menu="@menu/nav_menu"/>
-
 </androidx.drawerlayout.widget.DrawerLayout>

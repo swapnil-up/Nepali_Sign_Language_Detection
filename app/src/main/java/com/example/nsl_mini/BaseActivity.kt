@@ -30,7 +30,7 @@ open class BaseActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.title = "                Gesture \u0917\u0941\u0930\u0941"
+        supportActionBar?.title = "Gesture \u0917\u0941\u0930\u0941"
 
         drawerToggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,

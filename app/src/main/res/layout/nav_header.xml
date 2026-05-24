@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:background="?attr/colorPrimaryDark">
+    android:padding="24dp"
+    android:background="@color/navHeader">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,11 +13,13 @@
         android:text="Gesture \u0917\u0941\u0930\u0941"
         android:textColor="@android:color/white"
         android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="Nepali Sign Language"
         android:textColor="@android:color/white"
         android:textSize="14sp"

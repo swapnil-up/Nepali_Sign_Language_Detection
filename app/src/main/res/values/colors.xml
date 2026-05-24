@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary">#8B1A1A</color>
+    <color name="primaryDark">#6B1010</color>
+    <color name="primaryLight">#B33A3A</color>
+    <color name="accent">#D4A017</color>
+    <color name="accentLight">#E8C252</color>
+    <color name="background">#FFFAF0</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="textPrimary">#1A1A2E</color>
+    <color name="textSecondary">#6B7280</color>
+    <color name="navHeader">#8B1A1A</color>
+    <color name="toolbarBg">#8B1A1A</color>
+    <color name="buttonPrimary">#8B1A1A</color>
+    <color name="buttonPrimaryPressed">#6B1010</color>
+    <color name="success">#059669</color>
+    <color name="error">#DC2626</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="green">#009688</color>
-    <color name="blue">#8692f7</color>
-    <color name="orange">#ffdab9 </color>
-    <color name="splash">#bdbdbd</color>
-    <color name="splashscreen">#f6ece1</color>
-    <color name="one">#eeb22c</color>
-    <color name="two">#2a2a34</color>
-    <color name="three">#bfa581</color>
-    <color name="red">#FF0000</color>
-    <color name="lavender">#8692f7</color>
-    <color name="grey">#ff424242</color>
-    <color name="teal_200">#80CBC4</color>
-    <color name="teal_700">#00796B</color>
-    <color name="BurntSienna">	#ed7c58</color>
-    <color name="Flax">#eccc84</color>
-    <color name="JapaneseIndigo">#283854</color>
-    <color name="FrenchLilac">#9068a0</color>
-    <color name="PastelBlue">#a9ced1</color>
-    <color name="RoseEbony">#614439</color>
-    <color name="RoseEbon">#0d47a1</color>
-    <color name="selected_item_background">#ffdab9</color> <!-- Example color for selected item -->
-    <color name="transparent">#ed7c58</color> <!-- Example color for unselected item -->
+    <color name="overlay">#80000000</color>
+    <color name="cardBorder">#E5E7EB</color>
 
+    <color name="green">#059669</color>
+    <color name="splashscreen">#FFFAF0</color>
+    <color name="tonalBg">#FCE4E4</color>
+    <color name="tonalText">#8B1A1A</color>
 </resources>

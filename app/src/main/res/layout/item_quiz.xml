@@ -1,57 +1,73 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/splash"
-    android:padding="8dp">
-
-    <ImageView
-        android:id="@+id/quizImageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/rectangle"
-        android:scaleType="centerCrop" />
-
-    <TextView
-        android:id="@+id/optionsTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Options"
-        android:background="@drawable/background_box"
-        android:layout_marginBottom="16dp"
-        android:padding="8dp" />
-
-    <TextView
-        android:id="@+id/correctAnswerTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Correct Answer"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/background_box"
-        android:padding="8dp" />
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp"
-        android:padding="8dp">
+        android:orientation="vertical"
+        android:padding="12dp">
 
-        <Button
-            android:id="@+id/editButton"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/orange"
-            android:text="Edit" />
+        <ImageView
+            android:id="@+id/quizImageView"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:padding="4dp"
+            android:background="@color/surface" />
 
-        <Button
-            android:id="@+id/deleteButton"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <TextView
+            android:id="@+id/optionsTextView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/orange"
-            android:text="Delete" />
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:text="Options"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/correctAnswerTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:padding="8dp"
+            android:text="Correct Answer"
+            android:textColor="@color/success"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/editButton"
+                style="@style/TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text="Edit"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/deleteButton"
+                style="@style/TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="Delete"
+                android:textAllCaps="false" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</androidx.cardview.widget.CardView>
