@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import androidx.core.view.GravityCompat
-import android.util.Log
 import android.content.Intent
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
@@ -15,10 +14,14 @@ open class BaseActivity : AppCompatActivity() {
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
     private lateinit var drawerToggle: ActionBarDrawerToggle
+    private var drawerSetupDone = false
 
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)
-        setupDrawer()
+        if (!drawerSetupDone) {
+            setupDrawer()
+            drawerSetupDone = true
+        }
     }
 
     protected fun setupDrawer() {
@@ -41,39 +44,36 @@ open class BaseActivity : AppCompatActivity() {
         drawerToggle.drawerArrowDrawable.color = ContextCompat.getColor(this, R.color.white)
 
         navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
-                R.id.nav_learn -> {
-                    val intent = Intent(this, LearnActivity::class.java)
-                    startActivity(intent)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
-                R.id.nav_upload_and_learn -> {
-                    val intent = Intent(this, PhotoModelActivity::class.java)
-                    startActivity(intent)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
-                R.id.nav_play_quiz -> {
-                    val intent = Intent(this, PlayQuizActivity::class.java)
-                    startActivity(intent)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
-                R.id.any_question -> {
-                    val intent = Intent(this, AnyQuestionActivity::class.java)
-                    startActivity(intent)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
-                R.id.nav_admin_panel -> {
-                    val intent = Intent(this, AddQuizActivity::class.java)
-                    startActivity(intent)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
+            if (!onNavItemSelected(menuItem.itemId)) {
+                drawerLayout.closeDrawer(GravityCompat.START)
             }
             true
+        }
+    }
+
+    protected open fun onNavItemSelected(itemId: Int): Boolean {
+        return when (itemId) {
+            R.id.nav_home -> {
+                startActivity(Intent(this, MainActivity::class.java))
+                true
+            }
+            R.id.nav_learn -> {
+                startActivity(Intent(this, LearnActivity::class.java))
+                true
+            }
+            R.id.nav_upload_and_learn -> {
+                startActivity(Intent(this, PhotoModelActivity::class.java))
+                true
+            }
+            R.id.nav_play_quiz -> {
+                startActivity(Intent(this, PlayQuizActivity::class.java))
+                true
+            }
+            R.id.nav_admin_panel -> {
+                startActivity(Intent(this, AddQuizActivity::class.java))
+                true
+            }
+            else -> false
         }
     }
 }

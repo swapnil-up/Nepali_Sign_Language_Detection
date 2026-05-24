@@ -21,6 +21,7 @@ class CameraHelper(
     private var captureSession: CameraCaptureSession? = null
     private var isFrontCamera: Boolean = false
     private var isCameraOpen: Boolean = false
+    private var frameSkip = 0
 
     init {
         textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
@@ -31,6 +32,7 @@ class CameraHelper(
             override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {}
 
             override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
+                if (frameSkip++ % 3 != 0) return
                 textureView.bitmap?.let { bitmap ->
                     onBitmapReady(bitmap)
                 }

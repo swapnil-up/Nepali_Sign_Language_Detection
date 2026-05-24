@@ -4,15 +4,6 @@
 
 Android (Kotlin) app that recognizes Nepali Sign Language hand gestures via the phone camera using MediaPipe. Fully offline — no Firebase, no backend, no login required. Package name: `com.example.nsl_mini`. Min SDK 24, target SDK 34.
 
-## Key Files
-
-| File | Purpose |
-|---|---|
-| `app/build.gradle.kts` | Dependencies: MediaPipe, Material, Glide, RecyclerView |
-| `app/src/main/AndroidManifest.xml` | Permissions (CAMERA, INTERNET), 12 activities registered |
-| `app/src/main/assets/gesture_recognizer.task` | MediaPipe gesture model |
-| `app/src/main/java/com/example/nsl_mini/LocalQuizStorage.kt` | SharedPreferences-backed quiz persistence |
-
 ## Build & Run
 
 ```bash
@@ -25,91 +16,87 @@ export ANDROID_HOME=~/Android/Sdk
 # Build + Install
 ./gradlew installDebug
 
-# Sideload
-adb install app/build/outputs/apk/debug/app-debug.apk
+# Unit tests
+./gradlew test
 ```
 
-Gradle 8.2 is used via wrapper. JDK 17+ required.
+Gradle 8.2 via wrapper. JDK 17+ required.
 
 ## Architecture
 
-- **BaseActivity** — base class with navigation drawer (Home, Learn, Upload & Learn, Play Quiz, Admin Panel)
-- **MainActivity** — main gesture recognition screen (TextureView + Camera2 + MediaPipe)
-- **CameraHelper** — wraps Camera2 API, provides bitmap frames for recognition
-- **GestureRecognitionHelper** — wraps MediaPipe `GestureRecognizer` in LIVE_STREAM mode, returns recognized gesture names and hand landmarks
-- **LandmarkOverlayView** — custom View drawing hand landmarks on top of camera feed
-- **LearnActivity** / **ConsonantsActivity** / **VowelsActivity** / **NumbersActivity** — browse sign references with images
-- **PhotoModelActivity** — pick a photo from gallery and run gesture recognition on it
-- **AddQuizActivity** — admin panel for creating quiz questions (image + 4 options + correct answer)
-- **ViewQuizzesActivity** — list all quizzes with edit/delete
-- **PlayQuizActivity** — play through quizzes (multiple choice)
-- **QuizCompletedActivity** — shows score after quiz
-- **LocalQuizStorage** — persists quizzes to SharedPreferences as JSON array; quiz images saved to internal storage
-- **MyApp** (Application.kt) — minimal, no initialization needed
+### Sources: `app/src/main/java/com/example/nsl_mini/`
+
+| File | Role |
+|---|---|
+| **MainActivity** | Camera + gesture recognition with MediaPipe LIVE_STREAM mode |
+| **CameraHelper** | Camera2 wrapper, frame-skipped (every 3rd frame) to reduce GC pressure |
+| **GestureRecognitionHelper** | Implements `GestureRecognizer`. Wraps MediaPipe, converts `NormalizedLandmark` → `HandLandmark` |
+| **GestureRecognizer** | Interface with `setup()` + `recognizeAsync()` — allows `FakeGestureRecognizer` for tests |
+| **FakeGestureRecognizer** | Test double returning configured results |
+| **HandLandmark** | `data class(x, y, z)` — decouples overlay from MediaPipe types |
+| **LandmarkOverlayView** | Custom View drawing hand landmarks from `List<HandLandmark>` |
+| **GestureResultFormatter** | `firstGesture()`, `GESTURE_MODEL_FILE`, `compoundCharacters` list |
+| **BaseActivity** | Base with nav drawer. `onNavItemSelected()` is open for subclass override |
+| **LearnActivity** | 3 cards → launches `PagerActivity` with `intArrayExtra` drawable arrays |
+| **PagerActivity** | Parameterized pager (replaces Consonants/Vowels/NumbersActivity) |
+| **PhotoModelActivity** | Pick gallery photo, run gesture recognition on it |
+| **PlayQuizActivity** | Multiple-choice quiz via `QuizStorage`. Guards empty list |
+| **QuizCompletedActivity** | Shows final score |
+| **QuizStorage** | Interface: `saveQuiz`, `deleteQuiz`, `loadAllQuizzes`, `loadQuiz` |
+| **LocalQuizStorage** | SharedPreferences-backed `QuizStorage` impl; image files in `filesDir/quiz_images/` |
+| **InMemoryQuizStorage** | Pure-Kotlin `QuizStorage` for unit tests |
+| **AddQuizActivity** | Admin: create/edit quiz (image + 4 options + answer) |
+| **ViewQuizzesActivity** | List all quizzes with edit/delete |
+| **QuizzesAdapter** | RecyclerView adapter for quiz list |
+| **Quiz** | `data class(id, imageUrl, options, correctAnswer)` |
+| **MyApp** | Minimal `Application` subclass, no init needed |
+
+### Tests: `app/src/test/java/com/example/nsl_mini/`
+
+| File | Coverage |
+|---|---|
+| `QuizStorageTest.kt` | CRUD, update, delete, empty, nonexistent (7 tests) |
+| `GestureResultFormatterTest.kt` | firstGesture extraction, none/empty filtering, compound chars (5 tests) |
+| `FakeGestureRecognizerTest.kt` | Setup tracking, configured result (2 tests) |
 
 ## Key Technical Details
 
-- MediaPipe model runs at `RunningMode.LIVE_STREAM` with confidence threshold `0.65`
-- Camera uses deprecated `createCaptureSession` (Camera2 API). Upgrade candidate.
-- `onBackPressed()` is overridden in many activities (deprecated). `OnBackInvokedCallback` is the modern alternative.
-- Quiz images are copied from gallery URI to `context.filesDir/quiz_images/{id}.jpg` for persistence
-- No internet is required after the initial APK install
+- MediaPipe model: `gesture_recognizer1.task` in `assets/`, loaded via `GestureResultFormatter.GESTURE_MODEL_FILE`
+- Confidence threshold: `0.65` (hardcoded in `GestureRecognitionHelper`)
+- Camera frame capture: every 3rd frame (frame-skipped, ~10fps) — reduces bitmap allocations by 66%
+- Quiz images: copied from gallery URI to `context.filesDir/quiz_images/{id}.jpg`
+- Compound characters for backspace: `GestureResultFormatter.compoundCharacters` (`क्ष`, `त्र`, `ज्ञ`, `अं`, `अः`)
+- No internet required after APK install
 
 ## Navigation Flow
 
 ```
-SplashActivity → MainActivity (gesture camera)
-                  ├── LearnActivity → Consonants / Vowels / Numbers
-                  ├── PhotoModelActivity (upload & recognize)
-                  ├── PlayQuizActivity → QuizCompletedActivity
-                  ├── AnyQuestionActivity
-                  └── AddQuizActivity (Admin Panel)
-                       └── ViewQuizzesActivity
-```
-
-## Data Models
-
-```kotlin
-data class Quiz(
-    var id: String? = null,
-    var imageUrl: String? = null,     // File path or content URI
-    var options: List<String> = listOf(),
-    var correctAnswer: String? = null
-)
+MainActivity (gesture camera)
+  ├── LearnActivity → PagerActivity (vowels / consonants / numbers)
+  ├── PhotoModelActivity (upload & recognize)
+  ├── PlayQuizActivity → QuizCompletedActivity
+  └── AddQuizActivity (Admin Panel) → ViewQuizzesActivity
 ```
 
 ## Quiz Storage
 
-- **Key**: `local_quizzes` SharedPreferences file
-- **Storage key**: `quizzes` → JSON array string
+- **SharedPreferences file**: `local_quizzes`
+- **Key**: `quizzes` → JSON array string
 - **Images**: `/data/data/com.example.nsl_mini/files/quiz_images/{id}.jpg`
-- **Data structure**: Each quiz serialized to JSON with `id`, `imagePath`, `options` (array), `correctAnswer`
+- **Serialization**: `org.json.JSONArray`/`JSONObject` (no Gson dependency)
 
-## Deleted Files (Firebase removal)
+## Deleted / Removed
 
-The following were removed to make the app fully offline:
-- `google-services.json`, `LoginActivity`, `SignupActivity`, `UserProfileActivity`
-- `AdminActivity`, `UserAdapter`, `UserData`, `BaseActivityAdmin`
-- Firebase dependencies from build.gradle.kts
-- Firebase layouts (`activity_login`, `activity_signup`, `activity_user_profile`, `activity_admin`)
-- `nav_menu_admin.xml`, `toolbaradmin.xml`, `nav_header_admin.xml`
+- Firebase: `google-services.json`, all Firebase deps, `LoginActivity`, `SignupActivity`, `UserProfileActivity`, `AdminActivity`, `UserAdapter`, `UserData`, `BaseActivityAdmin`, Firebase layouts
+- Dead code: `CameraSource.kt`, `GestureRecognizerResultsAdapter.kt`, `AnyQuestionActivity`, `getQuizCount()`
+- Unused build deps: `dataBinding`, `circleimageview`, `kotlinx-coroutines-android`
+- Unused manifest permissions: `RECORD_AUDIO`, `WRITE_EXTERNAL_STORAGE`
+- Splash: `SplashActivity`, `activity_splash.xml`, `splash_video.mp4`
+- Redundant pager activities: `ConsonantsActivity`, `VowelsActivity`, `NumbersActivity` + their 3 layouts
 
-## Conventions
+## Notes
 
-- Kotlin DSL for Gradle
-- XML layouts with `activity_*` / `item_*` / `nav_*` naming
-- Glide for image loading
-- All activities use `drawer_layout`, `toolbarUser`, `nav_view` as standard nav drawer IDs
-
-## CLI Shortcuts (from project root)
-
-```bash
-# One-liner build + install
-ANDROID_HOME=~/Android/Sdk ./gradlew installDebug
-
-# Just build
-ANDROID_HOME=~/Android/Sdk ./gradlew assembleDebug
-
-# Clean then build
-ANDROID_HOME=~/Android/Sdk ./gradlew clean assembleDebug
-```
+- Most activities override deprecated `onBackPressed()` — upgrade candidate to `OnBackInvokedCallback`
+- `CameraHelper` uses deprecated `createCaptureSession` — upgrade candidate to `createCaptureSession` with `OutputConfiguration`
+- `PhotoModelActivity` uses deprecated `startActivityForResult` — already has a modern `registerForActivityResult` example in `AddQuizActivity`
+- Nav drawer items handled via `BaseActivity.onNavItemSelected()` — subclass override supported

@@ -28,18 +28,15 @@ class PhotoModelActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photomodel)
-        setupDrawer()
 
         selectImageButton = findViewById(R.id.selectImageButton)
         selectedImageView = findViewById(R.id.selectedImageView)
         resultTextView = findViewById(R.id.resultTextViewStatic)
 
-        // Initialize GestureRecognizerHelper
-        gestureRecognizerHelper = GestureRecognizerHelper(this) { result, landmarks ->
-            // Display the result in resultTextView
+        gestureRecognizerHelper = GestureRecognizerHelper(this) { result, _ ->
             resultTextView.text = result
         }
-        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer1.task")
+        gestureRecognizerHelper.setup(GestureResultFormatter.GESTURE_MODEL_FILE)
 
         selectImageButton.setOnClickListener {
             openGallery()

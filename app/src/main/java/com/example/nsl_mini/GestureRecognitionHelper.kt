@@ -7,24 +7,22 @@ import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
-import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizer
+import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizer as MpGestureRecognizer
 import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizerResult
-import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 
 class GestureRecognizerHelper(
     private val context: Context,
-    private val resultListener: (String, List<NormalizedLandmark>?) -> Unit)
+    private val resultListener: (String, List<HandLandmark>?) -> Unit) : GestureRecognizer {
 
-{
-    private var gestureRecognizer: GestureRecognizer? = null
+    private var gestureRecognizer: MpGestureRecognizer? = null
     private val confidenceThreshold = 0.65
 
-    fun setupGestureRecognizer(modelAssetPath: String) {
+    override fun setup(modelAssetPath: String) {
         val baseOptions = BaseOptions.builder()
             .setModelAssetPath(modelAssetPath)
             .build()
 
-        val options = GestureRecognizer.GestureRecognizerOptions.builder()
+        val options = MpGestureRecognizer.GestureRecognizerOptions.builder()
             .setBaseOptions(baseOptions)
             .setRunningMode(RunningMode.LIVE_STREAM)
             .setResultListener(this::returnLivestreamResult)
@@ -34,7 +32,7 @@ class GestureRecognizerHelper(
             .setMinTrackingConfidence(confidenceThreshold.toFloat())
             .build()
 
-        gestureRecognizer = GestureRecognizer.createFromOptions(context, options)
+        gestureRecognizer = MpGestureRecognizer.createFromOptions(context, options)
     }
 
     private fun returnLivestreamResult(result: GestureRecognizerResult, image: MPImage) {
@@ -42,13 +40,14 @@ class GestureRecognizerHelper(
 
         result.gestures().forEach { gestureList ->
             gestureList
-                .filter { it.score() >= confidenceThreshold } // Filter gestures by confidence
+                .filter { it.score() >= confidenceThreshold }
                 .forEach { gesture ->
                     stringBuilder.append("${gesture.categoryName()}\n")
                 }
         }
-        // Extract hand landmarks from the result
-        val handLandmarks = result.landmarks().flatten()
+        val handLandmarks = result.landmarks().flatten().map {
+            HandLandmark(x = it.x(), y = it.y(), z = it.z())
+        }
         resultListener(stringBuilder.toString().trim(), handLandmarks)
     }
 
@@ -56,7 +55,7 @@ class GestureRecognizerHelper(
         Log.e("GestureRecognizerHelper", "Error in gesture recognizer", error)
     }
 
-    fun recognizeAsync(bitmap: Bitmap, frameTime: Long) {
+    override fun recognizeAsync(bitmap: Bitmap, frameTime: Long) {
         val mpImage = BitmapImageBuilder(bitmap).build()
         gestureRecognizer?.recognizeAsync(mpImage, frameTime)
     }

@@ -28,14 +28,13 @@ class AddQuizActivity : BaseActivity() {
     private lateinit var uploadButton: Button
     private lateinit var selectImageButton: Button
     private var imageUri: Uri? = null
-    private lateinit var storage: LocalQuizStorage
+    private lateinit var storage: QuizStorage
 
     private var editingQuizId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_quiz)
-        setupDrawer()
 
         storage = LocalQuizStorage(this)
 

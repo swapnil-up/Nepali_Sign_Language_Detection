@@ -13,13 +13,12 @@ class PlayQuizActivity : BaseActivity() {
     private lateinit var quizList: MutableList<Quiz>
     private var currentQuizIndex = 0
     private var correctAnswers = 0
-    private lateinit var storage: LocalQuizStorage
+    private lateinit var storage: QuizStorage
     private var hasShownCompletion = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_quiz)
-        setupDrawer()
 
         storage = LocalQuizStorage(this)
 
@@ -39,6 +38,12 @@ class PlayQuizActivity : BaseActivity() {
         currentQuizIndex = 0
         correctAnswers = 0
         hasShownCompletion = false
+
+        if (quizList.isEmpty()) {
+            Toast.makeText(this, "No quizzes available. Add some from Admin Panel!", Toast.LENGTH_LONG).show()
+            return
+        }
+
         showNextQuiz()
     }
 

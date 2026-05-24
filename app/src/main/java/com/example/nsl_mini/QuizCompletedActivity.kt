@@ -10,7 +10,6 @@ class QuizCompletedActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz_completed)
-        setupDrawer()
 
         val correctAnswers = intent.getIntExtra("correctAnswers", 0)
         val totalQuestions = intent.getIntExtra("totalQuestions", 0)

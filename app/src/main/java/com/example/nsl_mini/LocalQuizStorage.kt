@@ -7,11 +7,11 @@ import org.json.JSONObject
 import java.io.File
 import java.util.UUID
 
-class LocalQuizStorage(context: Context) {
+class LocalQuizStorage(context: Context) : QuizStorage {
 
     private val prefs: SharedPreferences = context.getSharedPreferences("local_quizzes", Context.MODE_PRIVATE)
 
-    fun saveQuiz(quiz: Quiz) {
+    override fun saveQuiz(quiz: Quiz) {
         val quizzes = loadAllQuizzes().toMutableList()
         val existingIndex = quizzes.indexOfFirst { it.id == quiz.id }
         if (existingIndex >= 0) {
@@ -22,24 +22,20 @@ class LocalQuizStorage(context: Context) {
         saveAll(quizzes)
     }
 
-    fun deleteQuiz(quizId: String) {
+    override fun deleteQuiz(quizId: String) {
         val quizzes = loadAllQuizzes().toMutableList()
         quizzes.removeAll { it.id == quizId }
         saveAll(quizzes)
     }
 
-    fun loadAllQuizzes(): List<Quiz> {
+    override fun loadAllQuizzes(): List<Quiz> {
         val json = prefs.getString("quizzes", "[]") ?: "[]"
         val arr = JSONArray(json)
         return (0 until arr.length()).map { parseQuiz(arr.getJSONObject(it)) }
     }
 
-    fun loadQuiz(quizId: String): Quiz? {
+    override fun loadQuiz(quizId: String): Quiz? {
         return loadAllQuizzes().find { it.id == quizId }
-    }
-
-    fun getQuizCount(): Int {
-        return loadAllQuizzes().size
     }
 
     private fun saveAll(quizzes: List<Quiz>) {

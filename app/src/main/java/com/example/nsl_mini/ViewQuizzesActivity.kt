@@ -10,12 +10,11 @@ class ViewQuizzesActivity : BaseActivity() {
     private lateinit var quizzesRecyclerView: RecyclerView
     private lateinit var quizzesAdapter: QuizzesAdapter
     private lateinit var quizList: MutableList<Quiz>
-    private lateinit var storage: LocalQuizStorage
+    private lateinit var storage: QuizStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_quizzes)
-        setupDrawer()
 
         storage = LocalQuizStorage(this)
 

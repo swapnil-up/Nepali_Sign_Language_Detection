@@ -1,14 +1,11 @@
 package com.example.nsl_mini
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import android.view.TextureView
 import android.widget.Button
 import androidx.core.app.ActivityCompat
@@ -53,19 +50,10 @@ class MainActivity : BaseActivity() {
         backspaceButton.setOnClickListener {
             synchronized(this) {
                 if (cumulativeResult.isNotEmpty()) {
-                    if (cumulativeResult.endsWith("\u0905\u0902")) {
-                        cumulativeResult.delete(cumulativeResult.length - 2, cumulativeResult.length)
-                    }
-                    else if (cumulativeResult.endsWith("\u0915\u094D\u0937")) {
-                        cumulativeResult.delete(cumulativeResult.length - 3, cumulativeResult.length)
-                    }
-                    else if (cumulativeResult.endsWith("\u0924\u094D\u0930")) {
-                        cumulativeResult.delete(cumulativeResult.length - 3, cumulativeResult.length)
-                    }
-                    else if (cumulativeResult.endsWith("\u091C\u094D\u091E")) {
-                        cumulativeResult.delete(cumulativeResult.length - 3, cumulativeResult.length)
-                    }
-                    else if (cumulativeResult.endsWith("\u0905\u0903") || cumulativeResult.endsWith("\u0905:")) {
+                    val compound = GestureResultFormatter.compoundCharacters.firstOrNull { cumulativeResult.endsWith(it) }
+                    if (compound != null) {
+                        cumulativeResult.delete(cumulativeResult.length - compound.length, cumulativeResult.length)
+                    } else if (cumulativeResult.endsWith("\u0905:")) {
                         cumulativeResult.delete(cumulativeResult.length - 2, cumulativeResult.length)
                     } else {
                         cumulativeResult.deleteCharAt(cumulativeResult.length - 1)
@@ -110,18 +98,16 @@ class MainActivity : BaseActivity() {
             runOnUiThread {
                 resultTextView.text = result
                 landmarkOverlayView.setLandmarks(landmarks)
-                val currentLetter = result.split("\n").firstOrNull()?.trim()
-                if (currentLetter != null && currentLetter.lowercase() != "none") {
-                    if (currentLetter != lastDetectedLetter) {
-                        cumulativeResult.append(currentLetter)
-                        lastDetectedLetter = currentLetter
-                        lastResultTextView.text = "Last Detected Result: ${cumulativeResult.toString()}"
-                        scrollToEnd()
-                    }
+                val currentLetter = GestureResultFormatter.firstGesture(result)
+                if (currentLetter != null && currentLetter != lastDetectedLetter) {
+                    cumulativeResult.append(currentLetter)
+                    lastDetectedLetter = currentLetter
+                    lastResultTextView.text = "Last Detected Result: ${cumulativeResult.toString()}"
+                    scrollToEnd()
                 }
             }
         }
-        gestureRecognizerHelper.setupGestureRecognizer("gesture_recognizer1.task")
+        gestureRecognizerHelper.setup(GestureResultFormatter.GESTURE_MODEL_FILE)
 
         val listener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {

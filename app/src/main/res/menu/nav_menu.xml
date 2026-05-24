@@ -17,10 +17,6 @@
         android:icon="@android:drawable/ic_media_play"
         android:title="Play Quiz" />
     <item
-        android:id="@+id/any_question"
-        android:icon="@android:drawable/ic_menu_help"
-        android:title="?" />
-    <item
         android:id="@+id/nav_admin_panel"
         android:icon="@android:drawable/ic_menu_manage"
         android:title="Admin Panel" />
