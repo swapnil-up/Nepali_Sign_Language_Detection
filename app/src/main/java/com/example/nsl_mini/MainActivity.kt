@@ -1,14 +1,11 @@
 package com.example.nsl_mini
 
-import UserData
 import android.Manifest
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,23 +13,7 @@ import android.view.TextureView
 import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
 import android.graphics.SurfaceTexture
-import android.view.View
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import android.hardware.camera2.*
-import android.view.MotionEvent
-import android.widget.ImageButton
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import android.widget.HorizontalScrollView
 
 class MainActivity : BaseActivity() {
@@ -45,7 +26,6 @@ class MainActivity : BaseActivity() {
     private lateinit var backspaceButton: Button
     private lateinit var switchCameraButton: Button
     private lateinit var clearButton: Button
-    private lateinit var openDrawerButton: ImageButton
     private lateinit var horizontalScrollView: HorizontalScrollView
 
     private var cumulativeResult = StringBuilder()
@@ -55,21 +35,11 @@ class MainActivity : BaseActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
     private val CAMERA_PERMISSION_REQUEST_CODE = 100
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var databaseReference: DatabaseReference
-    private lateinit var userEventListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialize Firebase reference
-        databaseReference = FirebaseDatabase.getInstance().reference.child("users")
-
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
-
-        // Initialize views
         val textureView = findViewById<TextureView>(R.id.textureView)
         lastResultTextView = findViewById(R.id.lastResultTextView)
         lastResultTextView.isSelected = true
@@ -83,19 +53,19 @@ class MainActivity : BaseActivity() {
         backspaceButton.setOnClickListener {
             synchronized(this) {
                 if (cumulativeResult.isNotEmpty()) {
-                    if (cumulativeResult.endsWith("अं")) {
+                    if (cumulativeResult.endsWith("\u0905\u0902")) {
                         cumulativeResult.delete(cumulativeResult.length - 2, cumulativeResult.length)
                     }
-                    else if (cumulativeResult.endsWith("क्ष")) {
+                    else if (cumulativeResult.endsWith("\u0915\u094D\u0937")) {
                         cumulativeResult.delete(cumulativeResult.length - 3, cumulativeResult.length)
                     }
-                    else if (cumulativeResult.endsWith("त्र")) {
+                    else if (cumulativeResult.endsWith("\u0924\u094D\u0930")) {
                         cumulativeResult.delete(cumulativeResult.length - 3, cumulativeResult.length)
                     }
-                    else if (cumulativeResult.endsWith("ज्ञ")) {
+                    else if (cumulativeResult.endsWith("\u091C\u094D\u091E")) {
                         cumulativeResult.delete(cumulativeResult.length - 3, cumulativeResult.length)
                     }
-                    else if (cumulativeResult.endsWith("अः") || cumulativeResult.endsWith("अ:")) {
+                    else if (cumulativeResult.endsWith("\u0905\u0903") || cumulativeResult.endsWith("\u0905:")) {
                         cumulativeResult.delete(cumulativeResult.length - 2, cumulativeResult.length)
                     } else {
                         cumulativeResult.deleteCharAt(cumulativeResult.length - 1)
@@ -128,47 +98,10 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         } else {
             setupCamera(textureView)
-        }
-
-        // Load user data and set listener for updates
-        loadUserDataAndSetListener()
-    }
-
-    private fun loadUserDataAndSetListener() {
-        val userId = sharedPreferences.getString("user_id", null)
-        if (userId != null) {
-            userEventListener = object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        val userData = snapshot.getValue(UserData::class.java)
-                        userData?.let {
-                            // Save user data to SharedPreferences
-                            val editor = sharedPreferences.edit()
-                            editor.putString("username", it.username)
-                            editor.putString("profile_image_url", it.profileImageUrl)
-                            editor.apply()
-
-                            // Update navigation header
-                            updateNavigationHeader()
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e("MainActivity", "Error getting user data", error.toException())
-                }
-            }
-            databaseReference.child(userId).addValueEventListener(userEventListener)
         }
     }
 
@@ -224,17 +157,10 @@ class MainActivity : BaseActivity() {
         if (this::cameraHelper.isInitialized) {
             cameraHelper.stopCamera()
         }
-        // Remove the Firebase listener to prevent memory leaks
-        val userId = sharedPreferences.getString("user_id", null)
-        if (userId != null && this::userEventListener.isInitialized) {
-            databaseReference.child(userId).removeEventListener(userEventListener)
-        }
     }
-    override fun onBackPressed() {
-        // Call super.onBackPressed to ensure default back button behavior
-        super.onBackPressed()
 
-        // Finish the activity and exit the app
+    override fun onBackPressed() {
+        super.onBackPressed()
         finishAffinity()
     }
 }

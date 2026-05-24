@@ -6,28 +6,19 @@
     android:padding="16dp"
     android:background="?attr/colorPrimaryDark">
 
-    <ImageView
-        android:id="@+id/profileImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/circle"
-        android:clickable="true"
-        android:scaleType="centerCrop"
-        android:padding="2dp"
-        android:contentDescription="Profile Image" />
-
     <TextView
-        android:id="@+id/welcomeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome "
+        android:text="Gesture \u0917\u0941\u0930\u0941"
         android:textColor="@android:color/white"
-        android:textSize="20sp"/>
+        android:textSize="24sp"
+        android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/usernameTextViewNav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Nepali Sign Language"
         android:textColor="@android:color/white"
-        android:textSize="20sp"/>
+        android:textSize="14sp"
+        android:alpha="0.8"/>
 </LinearLayout>

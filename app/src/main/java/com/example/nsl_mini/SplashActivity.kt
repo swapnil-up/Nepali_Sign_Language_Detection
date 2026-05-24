@@ -25,18 +25,17 @@ class SplashActivity : AppCompatActivity() {
         }
         videoView.start()
 
-        // In case the video doesn't play correctly, fallback to a handler
         Handler(Looper.getMainLooper()).postDelayed({
             if (!videoView.isPlaying) {
                 startNextActivity()
             }
-        }, 6000) // Adjust the delay to be a bit longer than the video duration if necessary
+        }, 6000)
     }
 
     private fun startNextActivity() {
         if (!hasStartedNextActivity) {
             hasStartedNextActivity = true
-            val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+            val intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
