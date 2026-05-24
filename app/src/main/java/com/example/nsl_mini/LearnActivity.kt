@@ -12,7 +12,6 @@ class LearnActivity : BaseActivity() {
 
         val cardVowels = findViewById<CardView>(R.id.card_vowels)
         val cardConsonants = findViewById<CardView>(R.id.card_consonants)
-        val cardNumbers = findViewById<CardView>(R.id.card_numbers)
 
         cardVowels.setOnClickListener {
             startPager(
@@ -62,23 +61,6 @@ class LearnActivity : BaseActivity() {
                     R.drawable.consonant_la, R.drawable.consonant_va, R.drawable.consonant_s,
                     R.drawable.consonant_ss, R.drawable.consonant_sa, R.drawable.consonant_ha,
                     R.drawable.consonant_chya, R.drawable.consonant_tra, R.drawable.consonant_gya
-                )
-            )
-        }
-
-        cardNumbers.setOnClickListener {
-            startPager(
-                intArrayOf(
-                    R.drawable.sign_0, R.drawable.sign_1, R.drawable.sign_2,
-                    R.drawable.sign_3, R.drawable.sign_4, R.drawable.sign_5,
-                    R.drawable.sign_6, R.drawable.sign_7, R.drawable.sign_8,
-                    R.drawable.sign_9
-                ),
-                intArrayOf(
-                    R.drawable.number_sunya, R.drawable.number_ek, R.drawable.number_dvi,
-                    R.drawable.number_tin, R.drawable.number_car, R.drawable.number_pac,
-                    R.drawable.number_chah, R.drawable.number_sat, R.drawable.number_ath,
-                    R.drawable.number_nau
                 )
             )
         }

@@ -22,4 +22,12 @@
         <item name="backgroundTint">@color/tonalBg</item>
         <item name="android:textColor">@color/tonalText</item>
     </style>
+
+    <style name="IconButton" parent="Widget.Material3.Button.TonalButton">
+        <item name="backgroundTint">@color/tonalBg</item>
+        <item name="android:textColor">@color/tonalText</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
 </resources>
